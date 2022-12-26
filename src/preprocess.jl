@@ -16,19 +16,18 @@ of categorical attributes
 function preprocess_data(dataset)
     preprocessed_data = Feature[]
     features = names(dataset)
-    dtypes = eltype.(eachcol(dataset))
     for f in features
         curr_feature = dataset[!,f]
         if typeof(curr_feature) == Vector{Float64}
             dtype = "Float"
             min_val = minimum(curr_feature)
             max_val = maximum(curr_feature)
-            categories = Vector{String}()
+            categories = String[]
         elseif typeof(curr_feature) == Vector{Int64}
             dtype = "Int"
             min_val = minimum(curr_feature)
             max_val = maximum(curr_feature)
-            categories = Vector{String}()
+            categories = String[]
         else
             dtype = "Cat"
             min_val = -1.0
@@ -46,7 +45,6 @@ Calculate the dimension of the problem.
 function problem_dimension(features)
     dimension = length(features) + 1
     for f in features
-        println(f.dtype)
         if f.dtype == "Float" || f.dtype == "Int"
             dimension += 3
         else
