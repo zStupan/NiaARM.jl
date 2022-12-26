@@ -1,3 +1,4 @@
+rules = Rule[]
 
 function mine(dataset)
     # LOAD DATASET
@@ -7,28 +8,31 @@ function mine(dataset)
 
     # PARAMETERS
     MAX_ITER = 500
-    NP = problem_dimension(features)
-    println("dimensions: ", NP)
+    dimension = problem_dimension(features)
     # RUN random search for now
-    iters = 0
-    best_fitness = 0.0
     rng = MersenneTwister(1234)
+    iters = 0
+    best_fitness = 0
     while iters < MAX_ITER
-        solution = rand!(rng, zeros(NP))
+        solution = rand!(rng, zeros(dimension))
         fitness = evaluate(solution, features, instances)
-        if fitness > 0.0
+        if fitness > best_fitness
             println("Best: ", fitness)
-            global best_fitness = fitness
+            best_fitness = fitness
         end
-        global iters += 1
+        iters += 1
     end
+
+    global rules
+    return rules
+    
 end
 
 function evaluate(solution, features, instances)
     support = -1.0
     confidence = -1.0
     fitness = -1.0
-    rules = Rule[]
+    global rules
     # obtain cut point value and remove this value from a vector of solutions
     cut_value = last(solution)
     pop!(solution)
@@ -37,27 +41,20 @@ function evaluate(solution, features, instances)
     cut = cut_point(cut_value, length(features))
     # build a rule from candidate solution
     rule = build_rule(solution, features)
-
-    println("Rule: ", rule)
+    
     # get antecedent and consequent of rule
-    if length(rule) > 0
-        antecedent = rule[1:cut]
-        consequent = rule[(cut+1):end]
-    else
-        antecedent = Rule[]
-        consequent = Rule[]
-    end
+    antecedent = rule[begin:cut]
+    consequent = rule[cut + 1:end]
+
+    antecedent = collect(skipmissing(antecedent))
+    consequent = collect(skipmissing(consequent))
 
     if length(antecedent) > 0 && length(consequent) > 0
         support, confidence = supp_conf(antecedent, consequent, instances, features)
-    end
-
-    if support > 0.0 && confidence > 0.0
         fitness = calculate_fitness(support, confidence)
-
         newrule = Rule(antecedent, consequent, fitness, support, confidence)
 
-        if newrule ∉ rules
+        if support > 0.0 && confidence > 0.0 && newrule ∉ rules
             push!(rules, newrule)
         end
     end
@@ -88,8 +85,7 @@ function supp_conf(antecedent, consequent, instances, features)
         # antecedents first
         for attribute in antecedent
             if attribute.dtype != "Cat"
-                feature_min, feature_max = feature_borders(features, attribute.name)
-                if instance[attribute.name] >= feature_min && instance[attribute.name] < feature_max
+                if instance[attribute.name] >= attribute.min_val && instance[attribute.name] <= attribute.max_val
                     numant = numant + 1
                 end
             else
@@ -107,8 +103,7 @@ function supp_conf(antecedent, consequent, instances, features)
         numcon = 0
         for attribute in consequent
             if attribute.dtype != "Cat"
-                feature_min, feature_max = feature_borders(features, attribute.name)
-                if instance[attribute.name] >= feature_min && instance[attribute.name] < feature_max
+                if instance[attribute.name] >= attribute.min_val && instance[attribute.name] <= attribute.max_val
                     numcon = numcon + 1
                 end
             else
@@ -126,16 +121,11 @@ function supp_conf(antecedent, consequent, instances, features)
     return supp, conf
 end
 
+# Unused for now
 function feature_borders(features, name)
-    min_val = 0.0
-    max_val = 0.0
-    for f in features
-        if f.name == name
-            min_val = f.min_val
-            max_val = f.max_val
-        end
-    end
-    return min_val, max_val
+    index = findfirst(feature -> feature.name == name, features)
+    feature = features[index]
+    return feature.min_val, feature.max_val
 end
 
 function calculate_fitness(supp, conf)

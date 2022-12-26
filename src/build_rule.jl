@@ -1,6 +1,6 @@
 
 function build_rule(solution, features)
-    rule = Attribute[]
+    rule = []
 
     # obtain permutation vector
     len = length(solution)
@@ -15,9 +15,9 @@ function build_rule(solution, features)
         feature = features[i]
 
         # set current position in the vector
-        vector_position = feature_position(features, feature)
+        vector_position = feature_position(features, i)
 
-        threshold_position = vector_position + 1
+        threshold_position = vector_position + 1 + Int(feature.dtype != "Cat")
 
         if solution[vector_position] > solution[threshold_position]
             if feature.dtype != "Cat"
@@ -31,38 +31,29 @@ function build_rule(solution, features)
                         border1 = round(border1)
                         border2 = round(border2)
                     end
-                    push!(rule, Attribute(feature.name, feature.dtype, border1, border2, "EMPTY"))
+                    push!(rule, Attribute(feature.name, feature.dtype, border1, border2, ""))
 
                 else
                     categories = feature.categories
                     # need to check
-                    selected = trunc(Int, round(solution[vector_position] * (length(categories))))
+                    selected = trunc(Int, solution[vector_position] * (length(categories)))
                     if selected == 0
                         selected = 1
                     end
                     push!(rule, Attribute(feature.name, feature.dtype, 1.00, 1.00, categories[selected]))
             end
         else
-            continue
-            #push!(rule, Attribute("EMPTY", "EMPTY", 1.00, 1.00, "EMPTY")) # TODO
+            push!(rule, missing)
         end
 
     end
     return rule
 end
 
-# TODO
 function feature_position(features, feature)
-    position = 0
-    for f in features
-        if f.dtype == "Int" || f.dtype == "Float"
-            position = position + 2
-        else
-            position = position + 1
-        end
-        if f == feature
-           break
-        end
+    position = 1
+    for f in features[begin:feature - 1]
+        position += Int(f.dtype != "Cat") + 2
     end
     return position
 end
