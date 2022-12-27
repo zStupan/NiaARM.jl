@@ -1,21 +1,20 @@
-rules = Rule[]
-
 function mine(dataset)
     # LOAD DATASET
-    instances = load_dataset(dataset)
+    transactions = load_dataset(dataset)
     # GET PREPROCESSED FEATURES
-    features = preprocess_data(instances)
+    features = preprocess_data(transactions)
 
     # PARAMETERS
     MAX_ITER = 500
     dimension = problem_dimension(features)
+    rules = Rule[]
     # RUN random search for now
     rng = MersenneTwister(1234)
     iters = 0
     best_fitness = 0
     while iters < MAX_ITER
         solution = rand!(rng, zeros(dimension))
-        fitness = evaluate(solution, features, instances)
+        fitness = evaluate(solution, features, transactions, rules)
         if fitness > best_fitness
             println("Best: ", fitness)
             best_fitness = fitness
@@ -23,16 +22,13 @@ function mine(dataset)
         iters += 1
     end
 
-    global rules
-    return rules
-    
+    return rules 
 end
 
-function evaluate(solution, features, instances)
+function evaluate(solution, features, transactions, rules)
     support = -1.0
     confidence = -1.0
     fitness = -1.0
-    global rules
     # obtain cut point value and remove this value from a vector of solutions
     cut_value = last(solution)
     pop!(solution)
@@ -50,7 +46,7 @@ function evaluate(solution, features, instances)
     consequent = collect(skipmissing(consequent))
 
     if length(antecedent) > 0 && length(consequent) > 0
-        support, confidence = supp_conf(antecedent, consequent, instances, features)
+        support, confidence = metrics(antecedent, consequent, transactions)
         fitness = calculate_fitness(support, confidence)
         newrule = Rule(antecedent, consequent, fitness, support, confidence)
 
@@ -77,48 +73,30 @@ function cut_point(sol, num_attr)
     return cut
 end
 
-function supp_conf(antecedent, consequent, instances, features)
-    ant_final = 0
-    con_final = 0
-    for instance in eachrow(instances)
-        numant = 0
-        # antecedents first
-        for attribute in antecedent
-            if attribute.dtype != "Cat"
-                if instance[attribute.name] >= attribute.min_val && instance[attribute.name] <= attribute.max_val
-                    numant = numant + 1
-                end
-            else
-                if attribute.categories == instance[attribute.name]
-                    numant = numant + 1
-                end
-            end
-        end
+function metrics(antecedent, consequent, transactions)
+    num_transactions = nrow(transactions)
+    contains_antecedent = trues(num_transactions)
+    contains_consequent = trues(num_transactions)
 
-        if numant == length(antecedent)
-            ant_final = ant_final + 1
-        end
-
-        # consequents
-        numcon = 0
-        for attribute in consequent
-            if attribute.dtype != "Cat"
-                if instance[attribute.name] >= attribute.min_val && instance[attribute.name] <= attribute.max_val
-                    numcon = numcon + 1
-                end
-            else
-                if attribute.categories == instance[attribute.name]
-                    numcon = numcon + 1
-                end
-            end
-        end
-        if numcon == length(consequent) && numant == length(antecedent)
-            con_final = con_final + 1
-        end
+    for attribute in antecedent
+        contains_antecedent .&= transactions[:, attribute.name] .>= attribute.min_val
+        contains_antecedent .&= transactions[:, attribute.name] .<= attribute.max_val
     end
-    supp = con_final / nrow(instances)
-    conf = con_final / ant_final
-    return supp, conf
+
+    for attribute in consequent
+        contains_consequent .&= transactions[:, attribute.name] .>= attribute.min_val
+        contains_consequent .&= transactions[:, attribute.name] .<= attribute.max_val
+    end
+
+    count_full = sum(contains_antecedent .& contains_consequent)
+    count_lhs = sum(contains_antecedent .& .!contains_consequent)
+    # count_rhs = sum(.!contains_antecedent .& contains_consequent)
+    count_x = count_full + count_lhs
+
+    support = count_full / num_transactions
+    confidence = count_full / count_x
+
+    return support, confidence
 end
 
 # Unused for now
@@ -129,5 +107,5 @@ function feature_borders(features, name)
 end
 
 function calculate_fitness(supp, conf)
-    return ((1.0 * supp) + (1.0 * conf)) / 2
+    return (1.0 * supp + 1.0 * conf) / 2
 end
