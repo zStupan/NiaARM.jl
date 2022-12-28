@@ -22,7 +22,7 @@ function mine(dataset)
         iters += 1
     end
 
-    return rules 
+    return rules
 end
 
 function evaluate(solution, features, transactions, rules)
@@ -37,10 +37,10 @@ function evaluate(solution, features, transactions, rules)
     cut = cut_point(cut_value, length(features))
     # build a rule from candidate solution
     rule = build_rule(solution, features)
-    
+
     # get antecedent and consequent of rule
     antecedent = rule[begin:cut]
-    consequent = rule[cut + 1:end]
+    consequent = rule[cut+1:end]
 
     antecedent = collect(skipmissing(antecedent))
     consequent = collect(skipmissing(consequent))

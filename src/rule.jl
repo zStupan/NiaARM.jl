@@ -1,4 +1,3 @@
-
 mutable struct Rule
     antecedent::Vector{Attribute}
     consequent::Vector{Attribute}
@@ -6,4 +5,3 @@ mutable struct Rule
     support::Float64
     confidence::Float64
 end
-

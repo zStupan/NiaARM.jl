@@ -17,7 +17,7 @@ function preprocess_data(dataset)
     preprocessed_data = Feature[]
     features = names(dataset)
     for f in features
-        curr_feature = dataset[!,f]
+        curr_feature = dataset[!, f]
         if typeof(curr_feature) == Vector{Float64}
             dtype = "Float"
             min_val = minimum(curr_feature)

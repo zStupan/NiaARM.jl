@@ -47,7 +47,7 @@ end
 
 function feature_position(features, feature)
     position = 1
-    for f in features[begin:feature - 1]
+    for f in features[begin:feature-1]
         position += Int(f.dtype != "Cat") + 2
     end
     return position
