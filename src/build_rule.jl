@@ -17,30 +17,28 @@ function build_rule(solution, features)
 
         if solution[vector_position] > solution[threshold_position]
             if feature.dtype != "Cat"
-                border1 = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
+                min_val = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
                 vector_position = vector_position + 1
-                border2 = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
-                if border1 > border2
-                    border1, border2 = border2, border1
+                max_val = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
+                if min_val > max_val
+                    min_val, max_val = max_val, min_val
                 end
                 if feature.dtype == "Int"
-                    border1 = round(border1)
-                    border2 = round(border2)
+                    min_val = round(min_val)
+                    max_val = round(max_val)
                 end
-                push!(rule, Attribute(feature.name, feature.dtype, border1, border2, ""))
-
+                push!(rule, Attribute(feature.name, feature.dtype, min_val, max_val, ""))
             else
                 categories = feature.categories
                 selected = trunc(Int, solution[vector_position] * (length(categories)))
                 if selected == 0
                     selected = 1
                 end
-                push!(rule, Attribute(feature.name, feature.dtype, 1.00, 1.00, categories[selected]))
+                push!(rule, Attribute(feature.name, feature.dtype, NaN, NaN, categories[selected]))
             end
         else
             push!(rule, missing)
         end
-
     end
     return rule
 end

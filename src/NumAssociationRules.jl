@@ -1,6 +1,8 @@
 module NumAssociationRules
 using DataFrames
 using Random
+using CSV
+using CategoricalArrays
 
 export Attribute, build_rule, feature_position, mine, evaluate, cut_point,
         supp_conf, feature_borders, calculate_fitness, Feature, load_dataset,
