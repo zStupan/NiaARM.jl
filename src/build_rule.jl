@@ -1,4 +1,3 @@
-
 function build_rule(solution, features)
     rule = []
 
@@ -20,13 +19,11 @@ function build_rule(solution, features)
                 min_val = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
                 vector_position = vector_position + 1
                 max_val = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
-                if min_val > max_val
-                    min_val, max_val = max_val, min_val
-                end
                 if feature.dtype == "Int"
                     min_val = round(min_val)
                     max_val = round(max_val)
                 end
+                min_val, max_val = minmax(min_val, max_val)
                 push!(rule, Attribute(feature.name, feature.dtype, min_val, max_val, ""))
             else
                 categories = feature.categories
