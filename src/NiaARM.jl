@@ -1,4 +1,5 @@
-module NumAssociationRules
+module NiaARM
+
 using DataFrames
 using Random
 using CSV

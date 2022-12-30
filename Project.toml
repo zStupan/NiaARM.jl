@@ -1,6 +1,6 @@
-name = "NumAssociationRules"
+name = "NiaARM"
 uuid = "cb655f37-3f9a-467f-922e-5a165e048db7"
-authors = ["Iztok Fister Jr. <iztok@iztok-jr-fister.eu>"]
+authors = ["Iztok Fister Jr. <iztok@iztok-jr-fister.eu>", "Žiga Stupan <ziga.stupan1@student.um.si>"]
 version = "0.1.0"
 
 [deps]

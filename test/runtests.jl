@@ -1,7 +1,7 @@
-using NumAssociationRules
+using NiaARM
 using Test
 
-@testset verbose = true "NumAssociationRules.jl Tests" begin
+@testset verbose = true "NiaARM.jl Tests" begin
     @testset "Data Loading Tests" begin
         wiki = dataset("test_data/wiki.csv")
         sporty = dataset("test_data/sporty.csv")
