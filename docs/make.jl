@@ -2,7 +2,7 @@ using Documenter
 using NiaARM
 
 makedocs(
-    sitename = "NiaARM",
+    sitename = "NiaARM.jl",
     format = Documenter.HTML(),
     modules = [NiaARM]
 )
