@@ -1,4 +1,4 @@
-import Base.show
+import Base: show, ==
 
 struct Rule
     antecedent::Vector{Attribute}
@@ -8,8 +8,12 @@ struct Rule
     confidence::Float64
 end
 
-function Base.show(io::IO, rule::Rule)
+function show(io::IO, rule::Rule)
     print(io, "[", join(rule.antecedent, ", "), "]")
     print(io, " => ")
     print(io, "[", join(rule.consequent, ", "), "]")
+end
+
+function ==(lhs::Rule, rhs::Rule)
+    return lhs.antecedent == rhs.antecedent && lhs.consequent == rhs.consequent
 end

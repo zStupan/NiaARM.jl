@@ -11,13 +11,21 @@ function ContingencyTable(antecedent::Vector{Any}, consequent::Vector{Any}, tran
     contains_consequent = trues(num_transactions)
 
     for attribute in antecedent
-        contains_antecedent .&= transactions[:, attribute.name] .>= attribute.min_val
-        contains_antecedent .&= transactions[:, attribute.name] .<= attribute.max_val
+        if attribute.dtype != "Cat"
+            contains_antecedent .&= transactions[:, attribute.name] .>= attribute.min
+            contains_antecedent .&= transactions[:, attribute.name] .<= attribute.max
+        else
+            contains_antecedent .&= transactions[:, attribute.name] .== attribute.category
+        end
     end
 
     for attribute in consequent
-        contains_consequent .&= transactions[:, attribute.name] .>= attribute.min_val
-        contains_consequent .&= transactions[:, attribute.name] .<= attribute.max_val
+        if attribute.dtype != "Cat"
+            contains_consequent .&= transactions[:, attribute.name] .>= attribute.min
+            contains_consequent .&= transactions[:, attribute.name] .<= attribute.max
+        else
+            contains_consequent .&= transactions[:, attribute.name] .== attribute.category
+        end
     end
 
     count_all = sum(contains_antecedent .& contains_consequent)

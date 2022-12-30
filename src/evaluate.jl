@@ -1,9 +1,5 @@
-function mine(dataset, algorithm, stoppingcriterion; kwargs...)
-    # LOAD DATASET
-    transactions = load_dataset(dataset)
-    # GET PREPROCESSED FEATURES
-    features = preprocess_data(transactions)
-    dimension = problem_dimension(features)
+function mine(path_or_df, algorithm, stoppingcriterion; kwargs...)
+    transactions, features, dimension = dataset(path_or_df)
     problem = Problem(dimension, 0.0, 1.0)
     rules = Rule[]
     algorithm(evaluate, problem, stoppingcriterion, features=features, transactions=transactions, rules=rules; kwargs...)

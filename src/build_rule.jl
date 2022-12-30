@@ -2,9 +2,8 @@ function build_rule(solution, features)
     rule = []
 
     # obtain permutation vector
-    len = length(solution)
-    permutation = solution[len-length(features)+1:len]
-    permutation = sortperm(permutation, rev=true)
+    permutation = last(solution, length(features))
+    permutation = sortperm(permutation)
 
     for i in permutation
         feature = features[i]
@@ -16,15 +15,15 @@ function build_rule(solution, features)
 
         if solution[vector_position] > solution[threshold_position]
             if feature.dtype != "Cat"
-                min_val = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
+                min = solution[vector_position] * (feature.max - feature.min) + feature.min
                 vector_position = vector_position + 1
-                max_val = solution[vector_position] * (feature.max_val - feature.min_val) + feature.min_val
+                max = solution[vector_position] * (feature.max - feature.min) + feature.min
                 if feature.dtype == "Int"
-                    min_val = round(min_val)
-                    max_val = round(max_val)
+                    min = round(min)
+                    max = round(max)
                 end
-                min_val, max_val = minmax(min_val, max_val)
-                push!(rule, Attribute(feature.name, feature.dtype, min_val, max_val, ""))
+                min, max = minmax(min, max)
+                push!(rule, Attribute(feature.name, feature.dtype, min, max, ""))
             else
                 categories = feature.categories
                 selected = trunc(Int, solution[vector_position] * (length(categories)))

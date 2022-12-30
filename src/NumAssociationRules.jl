@@ -4,8 +4,8 @@ using Random
 using CSV
 using CategoricalArrays
 
-export Attribute, Feature, Rule, ContingencyTable, support, confidence, evaluate, load_dataset, preprocess_data, problem_dimension, mine,
-        Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de
+export Attribute, Feature, Rule, ContingencyTable, support, confidence, dataset, mine,
+        evaluate, Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
@@ -17,7 +17,7 @@ include("feature.jl")
 include("attribute.jl")
 include("rule.jl")
 include("metrics.jl")
-include("preprocess.jl")
+include("dataset.jl")
 include("build_rule.jl")
 include("evaluate.jl")
 
