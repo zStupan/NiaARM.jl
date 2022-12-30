@@ -15,8 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.6'
-          - '1'
+          - '1.8'
           - 'nightly'
         os:
           - ubuntu-latest
@@ -60,8 +59,8 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: doctest
-            using NumAssociationRules
-            doctest(NumAssociationRules)'
+            using NiaARM
+            doctest(NiaARM)'
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
