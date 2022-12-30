@@ -59,6 +59,8 @@ struct Rule
     Rule(antecedent::Vector{Attribute}, consequent::Vector{Attribute}) = new(antecedent, consequent, -Inf, ContingencyTable())
 
     Rule(antecedent::Vector{Attribute}, consequent::Vector{Attribute}, transactions::DataFrame) = new(antecedent, consequent, -Inf, ContingencyTable(antecedent, consequent, transactions))
+
+    Rule(rule::Rule, transactions::DataFrame) = new(rule.antecedent, rule.consequent, rule.fitness, ContingencyTable(rule.antecedent, rule.consequent, transactions))
 end
 
 countall(r::Rule) = countall(r.ct)
@@ -76,5 +78,3 @@ end
 function ==(lhs::Rule, rhs::Rule)
     return lhs.antecedent == rhs.antecedent && lhs.consequent == rhs.consequent
 end
-
-ContingencyTable(rule::Rule, transactions::DataFrame) = ContingencyTable(rule.antecedent, rule.consequent, transactions)
