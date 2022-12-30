@@ -29,12 +29,12 @@ using Test
         transactions, features, dimension = dataset("test_data/wiki.csv")
         rules = Rule[]
         problem = Problem(dimension, 0.0, 1.0)
-        solution = [0.45328107, 0.20655004, 0.2060223, 0.19727931, 0.10291945, 0.18117294, 0.50567635]
-        fitness = evaluate(solution, problem=problem, transactions=transactions, features=features, rules=rules)
+        solution = [0.45328107, 0.20655004, 0.2060223, 0.19727931, 0.10291945, 0.18117294, 0.50567635, 0.33333333]
+        fitness = narm(solution, problem=problem, transactions=transactions, features=features, rules=rules)
 
         @test length(rules) == 1
-        @test rules[1].support == 3.0 / 7.0
-        @test rules[1].confidence == 0.75
+        @test support(rules[1]) == 3.0 / 7.0
+        @test confidence(rules[1]) == 0.75
         @test rules[1].fitness == 33 / 56
         @test rules[1].fitness == -fitness
     end
