@@ -1,7 +1,23 @@
-mutable struct Attribute
+import Base: show, ==
+
+struct Attribute
     name::String
     dtype::String
-    min_val::Float64
-    max_val::Float64
-    categories::String
+    min::Float64
+    max::Float64
+    category::String
+end
+
+function show(io::IO, attribute::Attribute)
+    if attribute.dtype == "Float"
+        print(io, "$(attribute.name)(min = $(round(attribute.min, digits=4)), max = $(round(attribute.max, digits=4)))")
+    elseif attribute.dtype == "Int"
+        print(io, "$(attribute.name)(min = $(Int(attribute.min)), max = $(Int(attribute.max)))")
+    else
+        print(io, "$(attribute.name)(categories = $(attribute.categories))")
+    end
+end
+
+function ==(lhs::Attribute, rhs::Attribute)
+    return lhs.name == rhs.name && lhs.dtype == rhs.dtype && isequal(lhs.min, rhs.min) && isequal(lhs.max, rhs.max) && lhs.category == rhs.category
 end
