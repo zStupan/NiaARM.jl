@@ -8,6 +8,10 @@ function mine(path_or_df, algorithm, stoppingcriterion; kwargs...)
 end
 
 function evaluate(solution; problem, features, transactions, rules, kwargs...)
+    if length(solution) != problem.dimension
+        error("Dimension mismatch: $(length(solution)) != $(problem.dimension)")
+    end
+
     fitness = -Inf
     # obtain cut point value and remove this value from a vector of solutions
     cut_value = last(solution)

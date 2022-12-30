@@ -10,11 +10,11 @@ end
 
 function show(io::IO, attribute::Attribute)
     if attribute.dtype == "Float"
-        print(io, attribute.name, "(min = ", round(attribute.min, digits=2), ", max = ", round(attribute.max, digits=2), ")")
+        print(io, "$(attribute.name)(min = $(round(attribute.min, digits=4)), max = $(round(attribute.max, digits=4)))")
     elseif attribute.dtype == "Int"
-        print(io, attribute.name, "(min = ", Int(attribute.min), ", max = ", Int(attribute.max), ")")
+        print(io, "$(attribute.name)(min = $(Int(attribute.min)), max = $(Int(attribute.max)))")
     else
-        print(io, attribute.name, "(category = ", attribute.category, ")")
+        print(io, "$(attribute.name)(categories = $(attribute.categories))")
     end
 end
 

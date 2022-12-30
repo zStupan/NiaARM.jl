@@ -9,9 +9,7 @@ struct Rule
 end
 
 function show(io::IO, rule::Rule)
-    print(io, "[", join(rule.antecedent, ", "), "]")
-    print(io, " => ")
-    print(io, "[", join(rule.consequent, ", "), "]")
+    print(io, "[$(join(rule.antecedent, ", "))] => [$(join(rule.consequent, ", "))]")
 end
 
 function ==(lhs::Rule, rhs::Rule)
