@@ -19,6 +19,8 @@ struct CategoricalFeature <: Feature
     categories::Vector{String}
 end
 
+dtype(::CategoricalFeature) = String
+
 show(io::IO, feature::CategoricalFeature) = print(io, "$(feature.name)(categories = $((feature.categories)))")
 
 ==(lhs::CategoricalFeature, rhs::CategoricalFeature) = lhs.name == rhs.name && lhs.category == rhs.category

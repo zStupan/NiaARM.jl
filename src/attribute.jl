@@ -19,7 +19,9 @@ struct CategoricalAttribute <: Attribute
     category::String
 end
 
-show(io::IO, attribute::CategoricalFeature) = print(io, "$(attribute.name)(category = $((attribute.category)))")
+dtype(::CategoricalAttribute) = String
+
+show(io::IO, attribute::CategoricalAttribute) = print(io, "$(attribute.name)(category = $((attribute.category)))")
 
 ==(lhs::CategoricalAttribute, rhs::CategoricalAttribute) = lhs.name == rhs.name && lhs.category == rhs.category
 
