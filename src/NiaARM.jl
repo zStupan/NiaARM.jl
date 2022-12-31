@@ -5,8 +5,9 @@ using Random
 using CSV
 using CategoricalArrays
 
-export Attribute, Feature, Rule, ContingencyTable, countall, countlhs, countrhs, countnull, support, confidence, dataset, mine,
-        narm, Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de
+export Attribute, NumericalAttribute, CategoricalAttribute, Feature, NumericalFeature, CategoricalFeature,
+        isnumerical, iscategorical, dtype, Rule, ContingencyTable, countall, countlhs, countrhs, countnull,
+        support, confidence, dataset, mine, narm, Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")

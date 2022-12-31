@@ -66,26 +66,24 @@ function build_rule(solution, features)
         # set current position in the vector
         vector_position = feature_position(features, i)
 
-        threshold_position = vector_position + 1 + Int(feature.dtype != "Cat")
+        threshold_position = vector_position + 1 + Int(isnumerical(feature))
 
         if solution[vector_position] > solution[threshold_position]
-            if feature.dtype != "Cat"
+            if isnumerical(feature)
                 min = solution[vector_position] * (feature.max - feature.min) + feature.min
                 vector_position = vector_position + 1
                 max = solution[vector_position] * (feature.max - feature.min) + feature.min
-                if feature.dtype == "Int"
+                if dtype(feature) <: Integer
                     min = round(min)
                     max = round(max)
                 end
                 min, max = minmax(min, max)
-                push!(rule, Attribute(feature.name, feature.dtype, min, max, ""))
+                push!(rule, NumericalAttribute{dtype(feature)}(feature.name, min, max))
             else
                 categories = feature.categories
                 selected = trunc(Int, solution[vector_position] * (length(categories)))
-                if selected == 0
-                    selected = 1
-                end
-                push!(rule, Attribute(feature.name, feature.dtype, NaN, NaN, categories[selected]))
+                selected = selected == 0 ? 1 : selected
+                push!(rule, CategoricalAttribute(feature.name, categories[selected]))
             end
         else
             push!(rule, missing)
@@ -94,10 +92,10 @@ function build_rule(solution, features)
     return rule
 end
 
-function feature_position(features, feature)
+function feature_position(features, index)
     position = 1
-    for f in features[begin:feature-1]
-        position += Int(f.dtype != "Cat") + 2
+    for f in features[begin:index-1]
+        position += Int(isnumerical(f)) + 2
     end
     return position
 end

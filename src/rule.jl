@@ -14,7 +14,7 @@ struct ContingencyTable
         contains_consequent = trues(num_transactions)
 
         for attribute in antecedent
-            if attribute.dtype != "Cat"
+            if isnumerical(attribute)
                 contains_antecedent .&= transactions[:, attribute.name] .>= attribute.min
                 contains_antecedent .&= transactions[:, attribute.name] .<= attribute.max
             else
@@ -23,7 +23,7 @@ struct ContingencyTable
         end
 
         for attribute in consequent
-            if attribute.dtype != "Cat"
+            if isnumerical(attribute)
                 contains_consequent .&= transactions[:, attribute.name] .>= attribute.min
                 contains_consequent .&= transactions[:, attribute.name] .<= attribute.max
             else

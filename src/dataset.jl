@@ -1,6 +1,6 @@
 function dataset(df::DataFrame)
-    features = preprocess_data(df)
-    dim = problem_dimension(features)
+    features = getfeatures(df)
+    dim = problemdim(features)
     return (transactions=df, features=features, dimension=dim)
 end
 
@@ -13,39 +13,29 @@ end
 Basic preprocessing, calculation of borders, identification
 of categorical attributes
 """
-function preprocess_data(dataset)
-    preprocessed_data = Feature[]
-    features = names(dataset)
-    for f in features
-        curr_feature = dataset[:, f]
-        if eltype(curr_feature) <: AbstractFloat
-            dtype = "Float"
+function getfeatures(dataset)
+    features = Feature[]
+    for name in names(dataset)
+        curr_feature = dataset[:, name]
+        if eltype(curr_feature) <: Real
             min = minimum(curr_feature)
             max = maximum(curr_feature)
-            categories = String[]
-        elseif eltype(curr_feature) <: Integer
-            dtype = "Int"
-            min = minimum(curr_feature)
-            max = maximum(curr_feature)
-            categories = String[]
+            push!(features, NumericalFeature(name, min, max))
         else
-            dtype = "Cat"
-            min = NaN
-            max = NaN
-            categories = unique!(curr_feature)
+            categories = unique(string.(curr_feature))
+            push!(features, CategoricalFeature(name, categories))
         end
-        push!(preprocessed_data, Feature(f, dtype, min, max, categories))
     end
-    return preprocessed_data
+    return features
 end
 
 """
 Calculate the dimension of the problem.
 """
-function problem_dimension(features)
+function problemdim(features)
     dimension = length(features) + 1
     for f in features
-        dimension += 2 + Int(f.dtype != "Cat")
+        dimension += 2 + Int(isnumerical(f))
     end
     return dimension
 end
