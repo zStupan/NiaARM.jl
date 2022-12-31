@@ -12,11 +12,12 @@ using Test
 
         # check the dataype for features
         @test wiki.features[1].name == "Feat1"
-        @test wiki.features[1].dtype == "Cat"
+        @test iscategorical(wiki.features[1])
         @test wiki.features[1].categories == ["A", "B"]
 
         @test sporty.features[1].name == "duration"
-        @test sporty.features[1].dtype == "Float"
+        @test isnumerical(sporty.features[1])
+        @test dtype(sporty.features[1]) == Float64
         @test sporty.features[1].min == 43.15
         @test sporty.features[1].max == 80.68333333
 

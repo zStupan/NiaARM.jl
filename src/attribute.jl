@@ -1,23 +1,30 @@
 import Base: show, ==
 
-struct Attribute
+abstract type Attribute end
+
+struct NumericalAttribute{T<:Real} <: Attribute
     name::String
-    dtype::String
-    min::Float64
-    max::Float64
+    min::T
+    max::T
+end
+
+dtype(attribute::NumericalAttribute) = first(typeof(attribute).parameters)
+
+show(io::IO, attribute::NumericalAttribute) = print(io, "$(attribute.name)(min = $((attribute.min)), max = $((attribute.max)))")
+
+==(lhs::NumericalAttribute, rhs::NumericalAttribute) = lhs.name == rhs.name && isequal(lhs.min, rhs.min) && isequal(lhs.max, rhs.max)
+
+struct CategoricalAttribute <: Attribute
+    name::String
     category::String
 end
 
-function show(io::IO, attribute::Attribute)
-    if attribute.dtype == "Float"
-        print(io, "$(attribute.name)(min = $(round(attribute.min, digits=4)), max = $(round(attribute.max, digits=4)))")
-    elseif attribute.dtype == "Int"
-        print(io, "$(attribute.name)(min = $(Int(attribute.min)), max = $(Int(attribute.max)))")
-    else
-        print(io, "$(attribute.name)(categories = $(attribute.categories))")
-    end
-end
+dtype(::CategoricalAttribute) = String
 
-function ==(lhs::Attribute, rhs::Attribute)
-    return lhs.name == rhs.name && lhs.dtype == rhs.dtype && isequal(lhs.min, rhs.min) && isequal(lhs.max, rhs.max) && lhs.category == rhs.category
-end
+show(io::IO, attribute::CategoricalAttribute) = print(io, "$(attribute.name)(category = $((attribute.category)))")
+
+==(lhs::CategoricalAttribute, rhs::CategoricalAttribute) = lhs.name == rhs.name && lhs.category == rhs.category
+
+isnumerical(attribute::Attribute) = isa(attribute, NumericalAttribute)
+
+iscategorical(attribute::Attribute) = isa(attribute, CategoricalAttribute)
