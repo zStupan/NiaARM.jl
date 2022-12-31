@@ -1,6 +1,6 @@
 function narm(solution; problem, features, transactions, rules, kwargs...)
     if length(solution) != problem.dimension
-        error("Dimension mismatch: $(length(solution)) != $(problem.dimension)")
+        throw(DimensionMismatch("$(length(solution)) != $(problem.dimension)"))
     end
 
     fitness = -Inf
@@ -74,8 +74,8 @@ function build_rule(solution, features)
                 vector_position = vector_position + 1
                 max = solution[vector_position] * (feature.max - feature.min) + feature.min
                 if dtype(feature) <: Integer
-                    min = round(min)
-                    max = round(max)
+                    min = round(dtype(feature), min)
+                    max = round(dtype(feature), max)
                 end
                 min, max = minmax(min, max)
                 push!(rule, NumericalAttribute{dtype(feature)}(feature.name, min, max))

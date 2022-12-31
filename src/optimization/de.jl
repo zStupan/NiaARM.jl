@@ -1,6 +1,6 @@
 function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=50, cr::Float64=0.8, f::Float64=0.9, seed::Union{Int64,Nothing}=nothing, kwargs...)
-    if popsize < 3
-        error("popsize < 3")
+    if popsize < 4
+        throw(DomainError("popsize < 4"))
     end
 
     evals = 0
