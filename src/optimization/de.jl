@@ -40,7 +40,7 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
             if d == r || rand(rng) < cr
                 y[d] = pop[a, d] + f * pop[b, d] - pop[c, d]
                 y[d] = clamp(y[d], problem.lowerbound, problem.upperbound)
-            end 
+            end
         end
 
         newfitness = feval(y, problem=problem; kwargs...)
@@ -56,7 +56,7 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
         end
 
         evals += 1
-        iters +=1
+        iters += 1
     end
 
     return bestfitness

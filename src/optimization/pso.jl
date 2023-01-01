@@ -9,7 +9,7 @@ function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     pop = initpopulation(popsize, problem, rng)
     pbest = copy(pop)
     velocity = -lowervelocity .+ rand!(rng, similar(pop)) .* (uppervelocity - lowervelocity)
-    
+
     fitness = zeros(popsize)
     bestfitness = Inf
     bestindex = 1
