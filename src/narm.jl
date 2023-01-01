@@ -1,6 +1,6 @@
-function narm(solution; problem, features, transactions, rules, kwargs...)
+function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vector{Feature}, transactions::DataFrame, rules::Vector{Rule}, kwargs...)
     if length(solution) != problem.dimension
-        error("Dimension mismatch: $(length(solution)) != $(problem.dimension)")
+        throw(DimensionMismatch("$(length(solution)) != $(problem.dimension)"))
     end
 
     fitness = -Inf
@@ -34,26 +34,26 @@ function narm(solution; problem, features, transactions, rules, kwargs...)
     return -fitness  # Maximization
 end
 
-function cut_point(sol, num_attr)
+function cut_point(var::Float64, numfeatures::Int64)
     """Calculate cut point.
     Note: The cut point denotes which part of the vector belongs to the
     antecedent and which to the consequence of the mined association rule.
     """
-    cut = trunc(Int, (sol * num_attr))
+    cut = trunc(Int, (var * numfeatures))
     if cut == 0
         cut = 1
     end
-    if cut > num_attr - 1
-        cut = num_attr - 2
+    if cut > numfeatures - 1
+        cut = numfeatures - 2
     end
     return cut
 end
 
-function calculate_fitness(supp, conf)
+function calculate_fitness(supp::Float64, conf::Float64)
     return (1.0 * supp + 1.0 * conf) / 2
 end
 
-function build_rule(solution, features)
+function build_rule(solution::Vector{Float64}, features::Vector{Feature})
     rule = Union{Missing,Attribute}[]
 
     # obtain permutation vector
@@ -73,12 +73,13 @@ function build_rule(solution, features)
                 min = solution[vector_position] * (feature.max - feature.min) + feature.min
                 vector_position = vector_position + 1
                 max = solution[vector_position] * (feature.max - feature.min) + feature.min
-                if dtype(feature) <: Integer
-                    min = round(min)
-                    max = round(max)
-                end
                 min, max = minmax(min, max)
-                push!(rule, NumericalAttribute{dtype(feature)}(feature.name, min, max))
+                feature_type = dtype(feature)
+                if feature_type <: Integer
+                    push!(rule, NumericalAttribute(feature.name, round(feature_type, min), round(feature_type, max)))
+                else
+                    push!(rule, NumericalAttribute(feature.name, min, max))
+                end
             else
                 categories = feature.categories
                 selected = trunc(Int, solution[vector_position] * (length(categories)))
@@ -92,7 +93,7 @@ function build_rule(solution, features)
     return rule
 end
 
-function feature_position(features, index)
+function feature_position(features::Vector{Feature}, index::Int64)
     position = 1
     for f in features[begin:index-1]
         position += Int(isnumerical(f)) + 2

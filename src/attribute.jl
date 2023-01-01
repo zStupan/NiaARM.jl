@@ -6,6 +6,10 @@ struct NumericalAttribute{T<:Real} <: Attribute
     name::String
     min::T
     max::T
+
+    NumericalAttribute{T}(name::String, min::T, max::T) where {T<:Real} = min > max ? throw(ArgumentError("min > max")) : new(name, min, max)
+
+    NumericalAttribute(name::String, min::T, max::T) where {T<:Real} = min > max ? throw(ArgumentError("min > max")) : new{T}(name, min, max)
 end
 
 dtype(attribute::NumericalAttribute) = first(typeof(attribute).parameters)

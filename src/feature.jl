@@ -6,6 +6,10 @@ struct NumericalFeature{T<:Real} <: Feature
     name::String
     min::T
     max::T
+
+    NumericalFeature{T}(name::String, min::T, max::T) where {T<:Real} = min > max ? throw(ArgumentError("min > max")) : new(name, min, max)    
+
+    NumericalFeature(name::String, min::T, max::T) where {T<:Real} = min > max ? throw(ArgumentError("min > max")) : new{T}(name, min, max)
 end
 
 dtype(feature::NumericalFeature) = first(typeof(feature).parameters)
@@ -23,7 +27,7 @@ dtype(::CategoricalFeature) = String
 
 show(io::IO, feature::CategoricalFeature) = print(io, "$(feature.name)(categories = $((feature.categories)))")
 
-==(lhs::CategoricalFeature, rhs::CategoricalFeature) = lhs.name == rhs.name && lhs.category == rhs.category
+==(lhs::CategoricalFeature, rhs::CategoricalFeature) = lhs.name == rhs.name && lhs.categories == rhs.categories
 
 isnumerical(feature::Feature) = isa(feature, NumericalFeature)
 

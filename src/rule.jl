@@ -8,6 +8,8 @@ struct ContingencyTable
 
     ContingencyTable() = new(0, 0, 0, 0)
 
+    ContingencyTable(countall::Int64, countlhs::Int64, countrhs::Int64, countnull::Int64) = new(countall, countlhs, countrhs, countnull)
+
     function ContingencyTable(antecedent::Vector{Attribute}, consequent::Vector{Attribute}, transactions::DataFrame)
         num_transactions = nrow(transactions)
         contains_antecedent = trues(num_transactions)

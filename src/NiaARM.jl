@@ -7,7 +7,7 @@ using CategoricalArrays
 
 export Attribute, NumericalAttribute, CategoricalAttribute, Feature, NumericalFeature, CategoricalFeature,
         isnumerical, iscategorical, dtype, Rule, ContingencyTable, countall, countlhs, countrhs, countnull,
-        support, confidence, dataset, mine, narm, Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de
+        support, confidence, Dataset, mine, narm, Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
