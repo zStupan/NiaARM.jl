@@ -7,4 +7,6 @@
     @test !isnumerical(CategoricalFeature("gender", ["M", "F"]))
     @test iscategorical(CategoricalFeature("gender", ["M", "F"]))
     @test !iscategorical(NumericalFeature("name", 0, 1))
+    @test repr(NumericalFeature("name", 0, 1)) == "name(min = 0, max = 1)"
+    @test repr(CategoricalFeature("gender", ["M", "F"])) == "gender(categories = [\"M\", \"F\"])"
 end
