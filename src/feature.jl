@@ -9,7 +9,7 @@ struct NumericalFeature{T<:Real} <: Feature
 
     NumericalFeature{T}(name::String, min::T, max::T) where {T<:Real} = min > max ? throw(ArgumentError("min > max")) : new(name, min, max)    
 
-    NumericalFeature(name::String, min::T, max::T) where {T<:Real} = min > max ? throw(ArgumentError("min > max")) : new{T}(name, min, max)
+    NumericalFeature(name::String, min::T, max::T) where {T<:Real} = NumericalFeature{T}(name, min, max)
 end
 
 dtype(feature::NumericalFeature) = first(typeof(feature).parameters)
