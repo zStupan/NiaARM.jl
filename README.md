@@ -22,6 +22,10 @@ The current version includes (but is not limited to) the following functions:
 
 ## Installation
 
+```sh
+Pkg.add(url="https://github.com/firefly-cpp/NiaARM.jl.git")
+```
+
 ## Reference Papers:
 
 Ideas are based on the following research papers:
