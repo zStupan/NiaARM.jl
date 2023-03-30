@@ -3,6 +3,15 @@ function sample(rng::AbstractRNG, n::Int64, k::Int64)
     return first(perm, k)
 end
 
+"""
+    de(feval, problem, stoppingcriterion; popsize=10, omega=0.7, c1=2.0, c2=2.0, seed=nothing)
+
+Returns the optimal solution to `feval` found using the Differential Evolution algorithm.
+
+Reference:
+
+Storn, R., Price, K. Differential Evolution - A Simple and Efficient Heuristic for global Optimization over Continuous Spaces. Journal of Global Optimization 11, 341-359 (1997). https://doi.org/10.1023/A:1008202821328
+"""
 function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=50, cr::Float64=0.8, f::Float64=0.9, seed::Union{Int64,Nothing}=nothing, kwargs...)
     if popsize < 4
         throw(DomainError("popsize < 4"))
