@@ -4,7 +4,7 @@ function sample(rng::AbstractRNG, n::Int64, k::Int64)
 end
 
 """
-    de(feval, problem, stoppingcriterion; popsize=10, omega=0.7, c1=2.0, c2=2.0, seed=nothing)
+    de(feval, problem, stoppingcriterion; popsize=10, cr=0.8, f=0.9, seed=nothing)
 
 Returns the optimal solution to `feval` found using the Differential Evolution algorithm.
 
