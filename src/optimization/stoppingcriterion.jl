@@ -3,7 +3,7 @@ struct StoppingCriterion
     maxiters::Int64
     acceptable_fitness::Float64
 
-    function StoppingCriterion(maxevals::Int64=typemax(Int64), maxiters::Int64=typemax(Int64), acceptable_fitness::Float64=-Inf)
+    function StoppingCriterion(; maxevals::Int64=typemax(Int64), maxiters::Int64=typemax(Int64), acceptable_fitness::Float64=-Inf)
         if maxevals < 0
             throw(DomainError("maxevals < 0"))
         end
@@ -18,8 +18,6 @@ struct StoppingCriterion
 
         new(maxevals, maxiters, acceptable_fitness)
     end
-
-    StoppingCriterion(; maxevals::Int64=typemax(Int64), maxiters::Int64=typemax(Int64), acceptable_fitness::Float64=-Inf) = StoppingCriterion(maxevals, maxiters, acceptable_fitness)
 end
 
 function terminate(criterion::StoppingCriterion, evals::Int64, iters::Int64, bestfitness::Float64)
