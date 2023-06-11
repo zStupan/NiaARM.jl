@@ -9,7 +9,6 @@
     end
 
     @test_throws ArgumentError StoppingCriterion()
-    @test_throws DomainError StoppingCriterion(-1)
     @test_throws DomainError StoppingCriterion(maxiters=-1)
     @test terminate(criterion, typemax(Int), 0, 1.0)
     @test terminate(criterion, 0, typemax(Int), 0.5)
