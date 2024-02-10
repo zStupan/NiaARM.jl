@@ -16,7 +16,7 @@ dtype(attribute::NumericalAttribute) = first(typeof(attribute).parameters)
 
 show(io::IO, attribute::NumericalAttribute) = print(io, "$(attribute.name)(min = $((attribute.min)), max = $((attribute.max)))")
 
-==(lhs::NumericalAttribute, rhs::NumericalAttribute) = lhs.name == rhs.name && isequal(lhs.min, rhs.min) && isequal(lhs.max, rhs.max)
+==(lhs::NumericalAttribute, rhs::NumericalAttribute) = lhs.name == rhs.name && isapprox(lhs.min, rhs.min, atol=1e-6, rtol=1e-6) && isapprox(lhs.max, rhs.max, atol=1e-6, rtol=1e-6)
 
 struct CategoricalAttribute <: Attribute
     name::String

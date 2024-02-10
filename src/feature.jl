@@ -16,7 +16,7 @@ dtype(feature::NumericalFeature) = first(typeof(feature).parameters)
 
 show(io::IO, feature::NumericalFeature) = print(io, "$(feature.name)(min = $((feature.min)), max = $((feature.max)))")
 
-==(lhs::NumericalFeature, rhs::NumericalFeature) = lhs.name == rhs.name && isequal(lhs.min, rhs.min) && isequal(lhs.max, rhs.max)
+==(lhs::NumericalFeature, rhs::NumericalFeature) = lhs.name == rhs.name && isapprox(lhs.min, rhs.min, atol=1e-6, rtol=1e-6) && isapprox(lhs.max, rhs.max, atol=1e-6, rtol=1e-6)
 
 struct CategoricalFeature <: Feature
     name::String
