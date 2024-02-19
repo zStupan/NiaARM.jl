@@ -1,12 +1,3 @@
-"""
-    pso(feval, problem, stoppingcriterion; popsize=10, omega=0.7, c1=2.0, c2=2.0, seed=nothing)
-
-Returns the optimal solution to `feval` found using the Particle Swarm Optimization algorithm.
-
-Reference:
-
-J. Kennedy and R. Eberhart, "Particle swarm optimization," Proceedings of ICNN'95 - International Conference on Neural Networks, Perth, WA, Australia, 1995, pp. 1942-1948 vol.4, doi: 10.1109/ICNN.1995.488968.
-"""
 function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=10, omega::Float64=0.7, c1::Float64=2.0, c2::Float64=2.0, seed::Union{Int64,Nothing}=nothing, kwargs...)
     evals = 0
     iters = 0
