@@ -6,27 +6,27 @@
 
 # NiaARM.jl - Numerical Association Rule Mining in Julia
 
-## About
+## About 📋
 
-NiaARM.jl is a Julia framework for mining numerical association rules based on nature-inspired algorithms for optimization. Inspired by the [NiaARM](https://github.com/firefly-cpp/NiaARM) Python package, this package brings the power of numerical association rule mining to the Julia ecosystem. The current NiaARM.jl version supports the loading and preprocessing of datasets automatically, searching the numerical association rules and providing an output of identified association rules. Similar to the original NiaARM implementation, numerical association rule mining is defined as an optimization problem and solved using population-based nature-inspired algorithms implemented within this framework.
+NiaARM.jl is a Julia framework for mining numerical association rules based on nature-inspired algorithms for optimization. 🌿 Inspired by the [NiaARM](https://github.com/firefly-cpp/NiaARM) Python package, this package brings the power of numerical association rule mining to the Julia ecosystem. The current NiaARM.jl version supports the loading and preprocessing of datasets automatically, searching the numerical association rules and providing an output of identified association rules. 💻🔍 Similar to the original NiaARM implementation, numerical association rule mining is defined as an optimization problem and solved using population-based nature-inspired algorithms implemented within this framework.
 
-## Detailed insights
+## Detailed insights ✨
 The current version includes (but is not limited to) the following functions:
 
-- loading datasets in CSV format,
-- preprocessing of data,
-- searching for association rules,
-- providing an output of mined association rules,
-- generating statistics about mined association rules,
-- providing the implementation of several state-of-the-art nature-inspired algorithms for optimization.
+- loading datasets in CSV format 📂
+- preprocessing of data 🔄
+- searching for association rules 🔍
+- providing an output of mined association rules 📝
+- generating statistics about mined association rules 📊
+- providing the implementation of several state-of-the-art nature-inspired algorithms for optimization 🧬
 
-## Installation
+## Installation 📦
 
 ```
 pkg> add NiaARM
 ```
 
-## Usage
+## Usage 🚀
 
 ### Basic run example
 
@@ -49,7 +49,7 @@ for rule in rules
 end
 ```
 
-## Reference papers:
+## Reference papers 📄
 
 Ideas are based on the following research papers:
 
