@@ -61,6 +61,14 @@ Ideas are based on the following research papers:
 
 [4] I. Fister Jr., I. Fister [A brief overview of swarm intelligence-based algorithms for numerical association rule mining](https://arxiv.org/abs/2010.15524). arXiv preprint arXiv:2010.15524 (2020).
 
+## Related frameworks 🔗
+
+[1] [NiaARM: A minimalistic framework for Numerical Association Rule Mining](https://github.com/firefly-cpp/NiaARM)
+
+[2] [uARMSolver: universal Association Rule Mining Solver](https://github.com/firefly-cpp/uARMSolver)
+
+[3] [niarules: Numerical Association Rule Mining using Population-Based Nature-Inspired Algorithms](https://github.com/firefly-cpp/niarules)
+
 ## License
 
 This package is distributed under the MIT License. This license can be found online at <http://www.opensource.org/licenses/MIT>.
