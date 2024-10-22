@@ -2,15 +2,26 @@
   <img alt="logo" width="300" src=".github/images/logo.png">
 </p>
 
----
+<h1 align="center">
+  NiaARM.jl
+</h1>
 
-# NiaARM.jl - Numerical Association Rule Mining in Julia
+<h2 align="center">
+  Numerical Association Rule Mining in Julia
+</h2>
 
-## About 📋
+<p align="center">
+  <a href="#-detailed-insights">✨ Detailed insights</a> •
+  <a href="#-installation">📦 Installation</a> •
+  <a href="#-usage">🚀 Usage</a> •
+  <a href="#-reference-papers">📄 Reference papers</a> •
+  <a href="#-related-frameworks">🔗 Related frameworks</a> •
+  <a href="#-license">🔑 License</a>
+</p>
 
 NiaARM.jl is a Julia framework for mining numerical association rules based on nature-inspired algorithms for optimization. 🌿 Inspired by the [NiaARM](https://github.com/firefly-cpp/NiaARM) Python package, this package brings the power of numerical association rule mining to the Julia ecosystem. The current NiaARM.jl version supports the loading and preprocessing of datasets automatically, searching the numerical association rules and providing an output of identified association rules. 💻🔍 Similar to the original NiaARM implementation, numerical association rule mining is defined as an optimization problem and solved using population-based nature-inspired algorithms implemented within this framework.
 
-## Detailed insights ✨
+## ✨ Detailed insights
 The current version includes (but is not limited to) the following functions:
 
 - loading datasets in CSV format 📂
@@ -20,13 +31,13 @@ The current version includes (but is not limited to) the following functions:
 - generating statistics about mined association rules 📊
 - providing the implementation of several state-of-the-art nature-inspired algorithms for optimization 🧬
 
-## Installation 📦
+## 📦 Installation
 
 ```
 pkg> add NiaARM
 ```
 
-## Usage 🚀
+## 🚀 Usage
 
 ### Basic run example
 
@@ -49,7 +60,7 @@ for rule in rules
 end
 ```
 
-## Reference papers 📄
+## 📄 Reference papers
 
 Ideas are based on the following research papers:
 
@@ -61,7 +72,7 @@ Ideas are based on the following research papers:
 
 [4] I. Fister Jr., I. Fister [A brief overview of swarm intelligence-based algorithms for numerical association rule mining](https://arxiv.org/abs/2010.15524). arXiv preprint arXiv:2010.15524 (2020).
 
-## Related frameworks 🔗
+## 🔗 Related frameworks
 
 [1] [NiaARM: A minimalistic framework for Numerical Association Rule Mining](https://github.com/firefly-cpp/NiaARM)
 
@@ -69,7 +80,7 @@ Ideas are based on the following research papers:
 
 [3] [niarules: Numerical Association Rule Mining using Population-Based Nature-Inspired Algorithms](https://github.com/firefly-cpp/niarules)
 
-## License
+## 🔑 License
 
 This package is distributed under the MIT License. This license can be found online at <http://www.opensource.org/licenses/MIT>.
 
