@@ -1,7 +1,7 @@
 function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=10, omega::Float64=0.7, c1::Float64=2.0, c2::Float64=2.0, seed::Union{Int64,Nothing}=nothing, kwargs...)
     evals = 0
     iters = 0
-    rng = MersenneTwister(seed)
+    rng = Xoshiro(seed)
     
     range = problem.upperbound - problem.lowerbound
     lowervelocity = -range
