@@ -12,7 +12,7 @@
     @test f1 == de(sphere, problem, StoppingCriterion(maxevals=500), seed=1234)
     @test f2 == de(sphere, problem, StoppingCriterion(maxiters=500), seed=1234)
     @test f3 == de(sphere, problem, StoppingCriterion(acceptable_fitness=0.0), seed=1234)
-    @test f2 == de(sphere, problem, StoppingCriterion(maxevals=25000), seed=1234)
+    @test f2 == de(sphere, problem, StoppingCriterion(maxevals=25050), seed=1234)
     @test f4 == de(sphere, problem, StoppingCriterion(maxevals=10), seed=1234)
     @test f5 == de(sphere, problem, StoppingCriterion(maxevals=500), popsize=13, seed=1234)
 end
