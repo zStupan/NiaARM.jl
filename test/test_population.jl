@@ -6,6 +6,6 @@
 
     @test size(population, 1) == 50
     @test size(population, 2) == 10
-    @test population == initpopulation(popsize, problem, MersenneTwister(1234))
-    @test population != initpopulation(popsize, problem, MersenneTwister())
+    @test population == initpopulation(popsize, problem, Xoshiro(1234))
+    @test population != initpopulation(popsize, problem, Xoshiro())
 end
