@@ -7,20 +7,26 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     iters = 0
     rng = Xoshiro(seed)
 
+    dim = problem.dimension
     pop = initpopulation(popsize, problem, rng)
-    velocity = zeros(popsize, problem.dimension)
+    velocity = zeros(popsize, dim)
     freq = zeros(popsize)
     loudness = ones(popsize)
     pulse_rate = fill(0.5, popsize)
-
     fitness = zeros(popsize)
+
+    candidate = zeros(dim)
+    randbuf = similar(candidate)
+    best = similar(candidate)
+
     bestfitness = Inf
     bestindex = 1
 
     for (i, individual) in enumerate(eachrow(pop))
-        @inbounds fitness[i] = feval(individual, problem=problem; kwargs...)
-        if fitness[i] < bestfitness
-            @inbounds bestfitness = fitness[i]
+        f = feval(individual, problem=problem; kwargs...)
+        @inbounds fitness[i] = f
+        if f < bestfitness
+            bestfitness = f
             bestindex = i
         end
         evals += 1
@@ -30,34 +36,63 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
         end
     end
 
-    best = copy(pop[bestindex, :])
+    @inbounds best .= pop[bestindex, :]
+
+    lb = problem.lowerbound
+    ub = problem.upperbound
+    has_vector_bounds = lb isa AbstractArray
 
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         mean_loudness = sum(loudness) / popsize
         for i = 1:popsize
             freq[i] = fmin + (fmax - fmin) * rand(rng)
 
-            @inbounds velocity[i, :] = velocity[i, :] .+ (pop[i, :] .- best) .* freq[i]
-            @inbounds candidate = pop[i, :] .+ velocity[i, :]
-            @inbounds clamp!(candidate, problem.lowerbound, problem.upperbound)
+            @views @inbounds begin
+                vi = velocity[i, :]
+                xi = pop[i, :]
+                @. vi = vi + (xi - best) * freq[i]
+                @. candidate = xi + vi
+            end
+
+            if has_vector_bounds
+                @inbounds for d = 1:dim
+                    lbd = lb[d]
+                    ubd = ub[d]
+                    v = candidate[d]
+                    candidate[d] = v < lbd ? lbd : (v > ubd ? ubd : v)
+                end
+            else
+                clamp!(candidate, lb, ub)
+            end
 
             if rand(rng) > pulse_rate[i]
-                @inbounds candidate = best .+ mean_loudness .* (rand(rng, problem.dimension) .- 0.5)
-                @inbounds clamp!(candidate, problem.lowerbound, problem.upperbound)
+                rand!(rng, randbuf)
+                @views @. candidate = best + mean_loudness * (randbuf - 0.5)
+
+                if has_vector_bounds
+                    @inbounds for d = 1:dim
+                        lbd = lb[d]
+                        ubd = ub[d]
+                        v = candidate[d]
+                        candidate[d] = v < lbd ? lbd : (v > ubd ? ubd : v)
+                    end
+                else
+                    clamp!(candidate, lb, ub)
+                end
             end
 
             newfitness = feval(candidate, problem=problem; kwargs...)
 
             if newfitness < fitness[i] && rand(rng) < loudness[i]
-                @inbounds pop[i, :] = candidate
+                @views @inbounds pop[i, :] .= candidate
                 @inbounds fitness[i] = newfitness
 
                 loudness[i] *= alpha
-                pulse_rate[i] = 1 - (1 - pulse_rate[i]) * exp(-gamma)
+                pulse_rate[i] *= exp(-gamma)
 
                 if newfitness < bestfitness
                     bestfitness = newfitness
-                    best = copy(candidate)
+                    @inbounds best .= candidate
                 end
             end
 
