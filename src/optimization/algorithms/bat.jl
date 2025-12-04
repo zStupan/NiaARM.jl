@@ -1,4 +1,4 @@
-function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=20, fmin::Float64=0.0, fmax::Float64=2.0, alpha::Float64=0.9, gamma::Float64=0.9, seed::Union{Int64,Nothing}=nothing, kwargs...)
+function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=40, loudness0::Float64=1.0, pulse_rate0::Float64=1.0, fmin::Float64=0.0, fmax::Float64=2.0, alpha::Float64=0.97, gamma::Float64=0.1, seed::Union{Int64,Nothing}=nothing, kwargs...)
     if popsize <= 0
         throw(DomainError("popsize <= 0"))
     end
@@ -11,13 +11,13 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     pop = initpopulation(popsize, problem, rng)
     velocity = zeros(popsize, dim)
     freq = zeros(popsize)
-    loudness = ones(popsize)
-    pulse_rate = fill(0.5, popsize)
     fitness = zeros(popsize)
 
     candidate = zeros(dim)
     randbuf = similar(candidate)
     best = similar(candidate)
+    loudness = loudness0
+    base_pulse_rate = pulse_rate0
 
     bestfitness = Inf
     bestindex = 1
@@ -43,7 +43,9 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     has_vector_bounds = lb isa AbstractArray
 
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
-        mean_loudness = sum(loudness) / popsize
+        loudness *= alpha
+        current_pulse_rate = base_pulse_rate * (1 - exp(-gamma * (iters + 1)))
+
         for i = 1:popsize
             freq[i] = fmin + (fmax - fmin) * rand(rng)
 
@@ -52,6 +54,11 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
                 xi = pop[i, :]
                 @. vi = vi + (xi - best) * freq[i]
                 @. candidate = xi + vi
+            end
+
+            if rand(rng) < current_pulse_rate
+                randn!(rng, randbuf)
+                @. candidate = best + 0.1 * loudness * randbuf
             end
 
             if has_vector_bounds
@@ -65,35 +72,16 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
                 clamp!(candidate, lb, ub)
             end
 
-            if rand(rng) > pulse_rate[i]
-                rand!(rng, randbuf)
-                @views @. candidate = best + mean_loudness * (randbuf - 0.5)
-
-                if has_vector_bounds
-                    @inbounds for d = 1:dim
-                        lbd = lb[d]
-                        ubd = ub[d]
-                        v = candidate[d]
-                        candidate[d] = v < lbd ? lbd : (v > ubd ? ubd : v)
-                    end
-                else
-                    clamp!(candidate, lb, ub)
-                end
-            end
-
             newfitness = feval(candidate, problem=problem; kwargs...)
 
-            if newfitness < fitness[i] && rand(rng) < loudness[i]
+            if newfitness <= fitness[i] && rand(rng) > loudness
                 @views @inbounds pop[i, :] .= candidate
                 @inbounds fitness[i] = newfitness
+            end
 
-                loudness[i] *= alpha
-                pulse_rate[i] *= exp(-gamma)
-
-                if newfitness < bestfitness
-                    bestfitness = newfitness
-                    @inbounds best .= candidate
-                end
+            if newfitness <= bestfitness
+                bestfitness = newfitness
+                @inbounds best .= candidate
             end
 
             evals += 1
