@@ -38,10 +38,6 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
 
     @inbounds best .= pop[bestindex, :]
 
-    lb = problem.lowerbound
-    ub = problem.upperbound
-    has_vector_bounds = lb isa AbstractArray
-
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         loudness *= alpha
         current_pulse_rate = base_pulse_rate * (1 - exp(-gamma * (iters + 1)))
@@ -61,16 +57,7 @@ function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
                 @. candidate = best + 0.1 * loudness * randbuf
             end
 
-            if has_vector_bounds
-                @inbounds for d = 1:dim
-                    lbd = lb[d]
-                    ubd = ub[d]
-                    v = candidate[d]
-                    candidate[d] = v < lbd ? lbd : (v > ubd ? ubd : v)
-                end
-            else
-                clamp!(candidate, lb, ub)
-            end
+            clamp!(candidate, problem.lowerbound, problem.upperbound)
 
             newfitness = feval(candidate, problem=problem; kwargs...)
 
