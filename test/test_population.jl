@@ -1,5 +1,5 @@
 @testset "Population Tests" begin
-    rng = MersenneTwister(1234)
+    rng = Xoshiro(1234)
     popsize = 50
     problem = Problem(10, -5.12, 5.12)
     population = initpopulation(popsize, problem, rng)
