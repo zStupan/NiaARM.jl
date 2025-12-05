@@ -32,7 +32,7 @@ export Attribute,
     randomsearch,
     pso,
     de,
-    bat,
+    ba,
     sa,
     ga
 
