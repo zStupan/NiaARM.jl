@@ -33,16 +33,19 @@ export Attribute,
     pso,
     de,
     bat,
-    sa
+    sa,
+    ga
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
 include("optimization/population.jl")
+include("optimization/utils.jl")
 include("optimization/algorithms/randomsearch.jl")
 include("optimization/algorithms/pso.jl")
 include("optimization/algorithms/de.jl")
 include("optimization/algorithms/bat.jl")
 include("optimization/algorithms/sa.jl")
+include("optimization/algorithms/ga.jl")
 include("feature.jl")
 include("attribute.jl")
 include("rule.jl")

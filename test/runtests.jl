@@ -19,5 +19,6 @@ using Test
     include("test_pso.jl")
     include("test_bat.jl")
     include("test_sa.jl")
+    include("test_ga.jl")
     include("test_mine.jl")
 end
