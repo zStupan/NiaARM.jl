@@ -17,5 +17,6 @@ using Test
     include("test_randomsearch.jl")
     include("test_de.jl")
     include("test_pso.jl")
+    include("test_bat.jl")
     include("test_mine.jl")
 end
