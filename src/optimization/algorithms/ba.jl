@@ -1,4 +1,4 @@
-function bat(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=40, loudness0::Float64=1.0, pulse_rate0::Float64=1.0, fmin::Float64=0.0, fmax::Float64=2.0, alpha::Float64=0.97, gamma::Float64=0.1, seed::Union{Int64,Nothing}=nothing, kwargs...)
+function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=40, loudness0::Float64=1.0, pulse_rate0::Float64=1.0, fmin::Float64=0.0, fmax::Float64=2.0, alpha::Float64=0.97, gamma::Float64=0.1, seed::Union{Int64,Nothing}=nothing, kwargs...)
     if popsize <= 0
         throw(DomainError("popsize <= 0"))
     end
