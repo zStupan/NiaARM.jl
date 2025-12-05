@@ -12,10 +12,10 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
     fitness = zeros(popsize)
     bestfitness = Inf
     for (i, individual) in enumerate(eachrow(pop))
-        f = feval(individual, problem=problem; kwargs...)
+        fx = feval(individual, problem=problem; kwargs...)
         @inbounds fitness[i] = f
-        if f < bestfitness
-            bestfitness = f
+        if fx < bestfitness
+            bestfitness = fx
         end
         evals += 1
 
