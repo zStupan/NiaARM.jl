@@ -14,10 +14,10 @@ function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     bestfitness = Inf
     bestindex = 1
     for (i, individual) in enumerate(eachrow(pop))
-        @inbounds fitness[i] = feval(individual, problem=problem; kwargs...)
-        if fitness[i] < bestfitness
-            @inbounds bestfitness = fitness[i]
-            bestindex = i
+        f = feval(individual, problem=problem; kwargs...)
+        @inbounds fitness[i] = f
+        if f < bestfitness
+            bestfitness = f
         end
         evals += 1
 
