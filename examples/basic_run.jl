@@ -7,7 +7,7 @@ transactions = CSV.read("dataset.csv", DataFrame)
 criterion = StoppingCriterion(maxevals=5000)
 # call function for rule mining
 # the second parameter is the name of the optimization algorithm
-# for now, Bat Algorithm, Particle Swarm Optimization, Differential Evolution, and Random Search are implemented
+# for now, Bat Algorithm, Particle Swarm Optimization, Differential Evolution, Simulated Annealing and Random Search are implemented
 rules = mine(transactions, de, criterion, seed=1234)
 
 # print identified rules

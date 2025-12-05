@@ -5,9 +5,35 @@ using Random
 using CSV
 using CategoricalArrays
 
-export Attribute, NumericalAttribute, CategoricalAttribute, Feature, NumericalFeature, CategoricalFeature,
-        isnumerical, iscategorical, dtype, Rule, ContingencyTable, countall, countlhs, countrhs, countnull,
-        support, confidence, Dataset, mine, narm, Problem, StoppingCriterion, terminate, initpopulation, randomsearch, pso, de, bat
+export Attribute,
+    NumericalAttribute,
+    CategoricalAttribute,
+    Feature,
+    NumericalFeature,
+    CategoricalFeature,
+    isnumerical,
+    iscategorical,
+    dtype,
+    Rule,
+    ContingencyTable,
+    countall,
+    countlhs,
+    countrhs,
+    countnull,
+    support,
+    confidence,
+    Dataset,
+    mine,
+    narm,
+    Problem,
+    StoppingCriterion,
+    terminate,
+    initpopulation,
+    randomsearch,
+    pso,
+    de,
+    bat,
+    sa
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
@@ -16,6 +42,7 @@ include("optimization/algorithms/randomsearch.jl")
 include("optimization/algorithms/pso.jl")
 include("optimization/algorithms/de.jl")
 include("optimization/algorithms/bat.jl")
+include("optimization/algorithms/sa.jl")
 include("feature.jl")
 include("attribute.jl")
 include("rule.jl")
