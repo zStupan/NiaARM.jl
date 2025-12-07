@@ -20,5 +20,6 @@ using Test
     include("test_ba.jl")
     include("test_sa.jl")
     include("test_ga.jl")
+    include("test_lshade.jl")
     include("test_mine.jl")
 end
