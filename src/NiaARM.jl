@@ -32,7 +32,7 @@ export Attribute,
     randomsearch,
     pso,
     de,
-    bat,
+    ba,
     sa,
     ga
 
@@ -43,7 +43,7 @@ include("optimization/utils.jl")
 include("optimization/algorithms/randomsearch.jl")
 include("optimization/algorithms/pso.jl")
 include("optimization/algorithms/de.jl")
-include("optimization/algorithms/bat.jl")
+include("optimization/algorithms/ba.jl")
 include("optimization/algorithms/sa.jl")
 include("optimization/algorithms/ga.jl")
 include("feature.jl")
