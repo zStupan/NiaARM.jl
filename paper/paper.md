@@ -16,7 +16,7 @@ authors:
     corresponding: true 
     affiliation: 1
 affiliations:
- - name: University of Maribor, Faculty of Electrical Engineering and Computer Science
+  - name: University of Maribor, Faculty of Electrical Engineering and Computer Science
   index: 1
 date: 7 December 2025
 bibliography: paper.bib
