@@ -34,7 +34,8 @@ export Attribute,
     de,
     ba,
     sa,
-    ga
+    ga,
+    lshade
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
@@ -46,6 +47,7 @@ include("optimization/algorithms/de.jl")
 include("optimization/algorithms/ba.jl")
 include("optimization/algorithms/sa.jl")
 include("optimization/algorithms/ga.jl")
+include("optimization/algorithms/lshade.jl")
 include("feature.jl")
 include("attribute.jl")
 include("rule.jl")
