@@ -1,5 +1,5 @@
 """
-    es_mu_lambda(feval, problem, stoppingcriterion; kwargs...)
+    es(feval, problem, stoppingcriterion; kwargs...)
 
 Evolution Strategy with (μ,λ)-selection, uncorrelated mutation and self-adaptive step sizes.
 
