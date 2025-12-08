@@ -1,16 +1,3 @@
-"""
-    es(feval, problem, stoppingcriterion; kwargs...)
-
-Evolution Strategy with (μ,λ)-selection, uncorrelated mutation and self-adaptive step sizes.
-
-# Arguments
-- `mu::Int64=15`: Parent population size
-- `lambda::Int64=100`: Offspring population size (must be ≥ mu)
-- `sigma_init::Float64=0.3`: Initial step size as fraction of search range
-- `tau::Union{Float64,Nothing}=nothing`: Learning rate (auto-computed if nothing)
-- `tauprime::Union{Float64,Nothing}=nothing`: Global learning rate (auto-computed if nothing)
-- `seed::Union{Int64,Nothing}=nothing`: Random seed
-"""
 function es(
     feval::Function,
     problem::Problem,
