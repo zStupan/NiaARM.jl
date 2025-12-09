@@ -1,19 +1,3 @@
-function parentmedium!(trial::AbstractVector{Float64}, parent::AbstractVector{Float64}, problem::Problem)
-    @inbounds for d in 1:problem.dimension
-        if trial[d] < problem.lowerbound
-            trial[d] = (problem.lowerbound + parent[d]) / 2
-        elseif trial[d] > problem.upperbound
-            trial[d] = (problem.upperbound + parent[d]) / 2
-        end
-    end
-    return trial
-end
-
-function randcauchy(rng::AbstractRNG, loc::Float64, scale::Float64)
-    u = rand(rng)
-    return loc + scale * tan(pi * (u - 0.5))
-end
-
 function lshade(
     feval::Function,
     problem::Problem,

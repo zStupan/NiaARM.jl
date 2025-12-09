@@ -4,6 +4,7 @@ using DataFrames
 using Random
 using CSV
 using CategoricalArrays
+using SpecialFunctions
 
 export Attribute,
     NumericalAttribute,
@@ -37,7 +38,8 @@ export Attribute,
     ga,
     lshade,
     es,
-    abc
+    abc,
+    cs
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
@@ -52,6 +54,7 @@ include("optimization/algorithms/ga.jl")
 include("optimization/algorithms/lshade.jl")
 include("optimization/algorithms/es.jl")
 include("optimization/algorithms/abc.jl")
+include("optimization/algorithms/cs.jl")
 include("feature.jl")
 include("attribute.jl")
 include("rule.jl")
