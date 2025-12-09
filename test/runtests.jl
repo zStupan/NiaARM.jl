@@ -25,5 +25,6 @@ using Test
     include("test_abc.jl")
     include("test_cs.jl")
     include("test_fa.jl")
+    include("test_fpa.jl")
     include("test_mine.jl")
 end

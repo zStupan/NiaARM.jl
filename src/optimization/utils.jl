@@ -22,7 +22,7 @@ function randlevy(rng::AbstractRNG, dims::Vararg{Int64}; alpha::Float64=0.01, be
     return alpha .* u ./ (abs.(v) .^ (1 / beta))
 end
 
-function randlevy!(rng::AbstractRNG, out::Matrix{Float64}; alpha::Float64=0.01, beta::Float64=1.5)
+function randlevy!(rng::AbstractRNG, out::AbstractArray{Float64}; alpha::Float64=0.01, beta::Float64=1.5)
     sigma = (gamma(1 + beta) * sin(pi * beta / 2) / (gamma((1 + beta) / 2) * beta * 2 ^ ((beta - 1) / 2))) ^ (1 / beta)
     @inbounds for i in eachindex(out)
         u = sigma * randn(rng)
