@@ -40,7 +40,8 @@ export Attribute,
     es,
     abc,
     cs,
-    fa
+    fa,
+    fpa
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
@@ -57,6 +58,7 @@ include("optimization/algorithms/es.jl")
 include("optimization/algorithms/abc.jl")
 include("optimization/algorithms/cs.jl")
 include("optimization/algorithms/fa.jl")
+include("optimization/algorithms/fpa.jl")
 include("feature.jl")
 include("attribute.jl")
 include("rule.jl")
