@@ -1,8 +1,8 @@
 import Base: show, ==
 
-abstract type Attribute end
+abstract type AbstractAttribute end
 
-struct NumericalAttribute{T<:Real} <: Attribute
+struct NumericalAttribute{T<:Real} <: AbstractAttribute
     name::String
     min::T
     max::T
@@ -18,7 +18,7 @@ show(io::IO, attribute::NumericalAttribute) = print(io, "$(attribute.name)(min =
 
 ==(lhs::NumericalAttribute, rhs::NumericalAttribute) = lhs.name == rhs.name && isapprox(lhs.min, rhs.min, atol=1e-6, rtol=1e-6) && isapprox(lhs.max, rhs.max, atol=1e-6, rtol=1e-6)
 
-struct CategoricalAttribute <: Attribute
+struct CategoricalAttribute <: AbstractAttribute
     name::String
     category::String
 end
@@ -29,6 +29,6 @@ show(io::IO, attribute::CategoricalAttribute) = print(io, "$(attribute.name)(cat
 
 ==(lhs::CategoricalAttribute, rhs::CategoricalAttribute) = lhs.name == rhs.name && lhs.category == rhs.category
 
-isnumerical(attribute::Attribute) = isa(attribute, NumericalAttribute)
+isnumerical(attribute::AbstractAttribute) = isa(attribute, NumericalAttribute)
 
-iscategorical(attribute::Attribute) = isa(attribute, CategoricalAttribute)
+iscategorical(attribute::AbstractAttribute) = isa(attribute, CategoricalAttribute)

@@ -1,7 +1,7 @@
 @testset "Rule Tests" begin
     transactions = CSV.read("test_data/wiki.csv", DataFrame)
-    antecedent = Attribute[CategoricalAttribute("Feat1", "A")]
-    consequent = Attribute[NumericalAttribute("Feat2", 0, 0)]
+    antecedent = [CategoricalAttribute("Feat1", "A")]
+    consequent = [NumericalAttribute("Feat2", 0, 0)]
     rule = Rule(antecedent, consequent, transactions)
     rule1 = Rule(antecedent, consequent)
 

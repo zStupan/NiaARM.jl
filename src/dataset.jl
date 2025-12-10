@@ -1,6 +1,6 @@
 struct Dataset
     transactions::DataFrame
-    features::Vector{Feature}
+    features::Vector{AbstractFeature}
     dimension::Int64
 
     function Dataset(df::DataFrame)
@@ -16,7 +16,7 @@ struct Dataset
 end
 
 function getfeatures(df::DataFrame)
-    features = Feature[]
+    features = AbstractFeature[]
     for name in names(df)
         curr_feature = df[:, name]
         if eltype(curr_feature) <: Real
@@ -31,7 +31,7 @@ function getfeatures(df::DataFrame)
     return features
 end
 
-function problemdim(features::Vector{Feature})
+function problemdim(features::Vector{AbstractFeature})
     dimension = length(features) + 1
     for feature in features
         dimension += 2 + Int(isnumerical(feature))

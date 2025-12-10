@@ -13,7 +13,7 @@ struct ContingencyTable
 
     ContingencyTable(countall::Int64, countlhs::Int64, countrhs::Int64, countnull::Int64, amplitude::Float64, inclusion::Float64) = new(countall, countlhs, countrhs, countnull, amplitude, inclusion)
 
-    function ContingencyTable(antecedent::Vector{Attribute}, consequent::Vector{Attribute}, transactions::DataFrame)
+    function ContingencyTable(antecedent::Vector{<:AbstractAttribute}, consequent::Vector{<:AbstractAttribute}, transactions::DataFrame)
         num_transactions = nrow(transactions)
         contains_antecedent = trues(num_transactions)
         contains_consequent = trues(num_transactions)
@@ -75,16 +75,16 @@ countrhs(ct::ContingencyTable) = ct.countrhs
 countnull(ct::ContingencyTable) = ct.countnull
 
 struct Rule
-    antecedent::Vector{Attribute}
-    consequent::Vector{Attribute}
+    antecedent::Vector{AbstractAttribute}
+    consequent::Vector{AbstractAttribute}
     fitness::Float64
     ct::ContingencyTable
 
-    Rule(antecedent::Vector{Attribute}, consequent::Vector{Attribute}, fitness::Float64, ct::ContingencyTable) = new(antecedent, consequent, fitness, ct)
+    Rule(antecedent::Vector{<:AbstractAttribute}, consequent::Vector{<:AbstractAttribute}, fitness::Float64, ct::ContingencyTable) = new(antecedent, consequent, fitness, ct)
 
-    Rule(antecedent::Vector{Attribute}, consequent::Vector{Attribute}) = new(antecedent, consequent, -Inf, ContingencyTable())
+    Rule(antecedent::Vector{<:AbstractAttribute}, consequent::Vector{<:AbstractAttribute}) = new(antecedent, consequent, -Inf, ContingencyTable())
 
-    Rule(antecedent::Vector{Attribute}, consequent::Vector{Attribute}, transactions::DataFrame) = new(antecedent, consequent, -Inf, ContingencyTable(antecedent, consequent, transactions))
+    Rule(antecedent::Vector{<:AbstractAttribute}, consequent::Vector{<:AbstractAttribute}, transactions::DataFrame) = new(antecedent, consequent, -Inf, ContingencyTable(antecedent, consequent, transactions))
 
     Rule(rule::Rule, transactions::DataFrame) = new(rule.antecedent, rule.consequent, rule.fitness, ContingencyTable(rule.antecedent, rule.consequent, transactions))
 end

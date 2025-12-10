@@ -1,4 +1,4 @@
-function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vector{Feature}, transactions::DataFrame, rules::Vector{Rule}, metrics::Union{Dict{Symbol,Float64},Vector{Symbol},Vector{String}}, kwargs...)
+function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vector{AbstractFeature}, transactions::DataFrame, rules::Vector{Rule}, metrics::Union{Dict{Symbol,Float64},Vector{Symbol},Vector{String}}, kwargs...)
     if length(solution) != problem.dimension
         throw(DimensionMismatch("$(length(solution)) != $(problem.dimension)"))
     end
@@ -107,8 +107,8 @@ function get_metric_value(rule::Rule, metric_name::Symbol)
     end
 end
 
-function build_rule(solution::Vector{Float64}, features::Vector{Feature})
-    rule = Union{Missing,Attribute}[]
+function build_rule(solution::Vector{Float64}, features::Vector{AbstractFeature})
+    rule = Union{Missing,AbstractAttribute}[]
 
     # obtain permutation vector
     permutation = last(solution, length(features))
@@ -147,7 +147,7 @@ function build_rule(solution::Vector{Float64}, features::Vector{Feature})
     return rule
 end
 
-function feature_position(features::Vector{Feature}, index::Int64)
+function feature_position(features::Vector{AbstractFeature}, index::Int64)
     position = 1
     for f in features[begin:index-1]
         position += Int(isnumerical(f)) + 2

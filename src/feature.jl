@@ -1,8 +1,8 @@
 import Base: show, ==
 
-abstract type Feature end
+abstract type AbstractFeature end
 
-struct NumericalFeature{T<:Real} <: Feature
+struct NumericalFeature{T<:Real} <: AbstractFeature
     name::String
     min::T
     max::T
@@ -18,7 +18,7 @@ show(io::IO, feature::NumericalFeature) = print(io, "$(feature.name)(min = $((fe
 
 ==(lhs::NumericalFeature, rhs::NumericalFeature) = lhs.name == rhs.name && isapprox(lhs.min, rhs.min, atol=1e-6, rtol=1e-6) && isapprox(lhs.max, rhs.max, atol=1e-6, rtol=1e-6)
 
-struct CategoricalFeature <: Feature
+struct CategoricalFeature <: AbstractFeature
     name::String
     categories::Vector{String}
 end
@@ -29,6 +29,6 @@ show(io::IO, feature::CategoricalFeature) = print(io, "$(feature.name)(categorie
 
 ==(lhs::CategoricalFeature, rhs::CategoricalFeature) = lhs.name == rhs.name && lhs.categories == rhs.categories
 
-isnumerical(feature::Feature) = isa(feature, NumericalFeature)
+isnumerical(feature::AbstractFeature) = isa(feature, NumericalFeature)
 
-iscategorical(feature::Feature) = isa(feature, CategoricalFeature)
+iscategorical(feature::AbstractFeature) = isa(feature, CategoricalFeature)

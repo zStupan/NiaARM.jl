@@ -6,10 +6,10 @@ using CSV
 using CategoricalArrays
 using SpecialFunctions
 
-export Attribute,
+export AbstractAttribute,
     NumericalAttribute,
     CategoricalAttribute,
-    Feature,
+    AbstractFeature,
     NumericalFeature,
     CategoricalFeature,
     isnumerical,
