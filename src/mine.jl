@@ -1,7 +1,7 @@
-function mine(dataset::Dataset, algorithm::Function, stoppingcriterion::StoppingCriterion; kwargs...)
+function mine(dataset::Dataset, algorithm::Function, stoppingcriterion::StoppingCriterion; metrics::Union{Dict{Symbol,Float64},Vector{Symbol},Vector{String}}, kwargs...)
     problem = Problem(dataset.dimension, 0.0, 1.0)
     rules = Rule[]
-    algorithm(narm, problem, stoppingcriterion, features=dataset.features, transactions=dataset.transactions, rules=rules; kwargs...)
+    algorithm(narm, problem, stoppingcriterion, features=dataset.features, transactions=dataset.transactions, rules=rules, metrics=metrics; kwargs...)
     sort!(rules, by=rule -> rule.fitness, rev=true)
     return rules
 end
