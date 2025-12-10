@@ -6,17 +6,31 @@ struct ContingencyTable
     countrhs::Int64
     countnull::Int64
 
-    ContingencyTable() = new(0, 0, 0, 0)
+    amplitude::Float64
+    inclusion::Float64
 
-    ContingencyTable(countall::Int64, countlhs::Int64, countrhs::Int64, countnull::Int64) = new(countall, countlhs, countrhs, countnull)
+    ContingencyTable() = new(0, 0, 0, 0, 0.0, 0.0)
+
+    ContingencyTable(countall::Int64, countlhs::Int64, countrhs::Int64, countnull::Int64, amplitude::Float64, inclusion::Float64) = new(countall, countlhs, countrhs, countnull, amplitude, inclusion)
 
     function ContingencyTable(antecedent::Vector{Attribute}, consequent::Vector{Attribute}, transactions::DataFrame)
         num_transactions = nrow(transactions)
         contains_antecedent = trues(num_transactions)
         contains_consequent = trues(num_transactions)
 
+        featuresmin = combine(transactions, names(transactions, Real) .=> minimum, renamecols=false)
+        featuresmax = combine(transactions, names(transactions, Real) .=> maximum, renamecols=false)
+
+        acc = 0
         for attribute in antecedent
             if isnumerical(attribute)
+                featuremin = featuresmin[1, attribute.name]
+                featuremax = featuresmax[1, attribute.name]
+                if featuremax == featuremin
+                    acc += 1
+                else
+                    acc += (attribute.max - attribute.min) / (featuremax - featuremin)
+                end
                 contains_antecedent .&= transactions[:, attribute.name] .>= attribute.min
                 contains_antecedent .&= transactions[:, attribute.name] .<= attribute.max
             else
@@ -26,6 +40,13 @@ struct ContingencyTable
 
         for attribute in consequent
             if isnumerical(attribute)
+                featuremin = featuresmin[1, attribute.name]
+                featuremax = featuresmax[1, attribute.name]
+                if featuremax == featuremin
+                    acc += 1
+                else
+                    acc += (attribute.max - attribute.min) / (featuremax - featuremin)
+                end
                 contains_consequent .&= transactions[:, attribute.name] .>= attribute.min
                 contains_consequent .&= transactions[:, attribute.name] .<= attribute.max
             else
@@ -38,7 +59,10 @@ struct ContingencyTable
         countrhs = sum(.!contains_antecedent .& contains_consequent)
         countnull = sum(.!contains_antecedent .& .!contains_consequent)
 
-        return new(countall, countlhs, countrhs, countnull)
+        amplitude = 1 - (1 / (length(antecedent) + length(consequent))) * acc
+        inclusion = (length(antecedent) + length(consequent)) / ncol(transactions)
+
+        return new(countall, countlhs, countrhs, countnull, amplitude, inclusion)
     end
 end
 

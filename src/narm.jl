@@ -1,4 +1,4 @@
-function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vector{Feature}, transactions::DataFrame, rules::Vector{Rule}, kwargs...)
+function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vector{Feature}, transactions::DataFrame, rules::Vector{Rule}, metrics::Union{Dict{Symbol,Float64},Vector{Symbol},Vector{String}}, kwargs...)
     if length(solution) != problem.dimension
         throw(DimensionMismatch("$(length(solution)) != $(problem.dimension)"))
     end
@@ -23,7 +23,9 @@ function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vec
         ct = ContingencyTable(antecedent, consequent, transactions)
         supp = support(ct)
         conf = confidence(ct)
-        fitness = calculate_fitness(supp, conf)
+        # Create temporary rule for fitness calculation
+        temp_rule = Rule(antecedent, consequent, -Inf, ct)
+        fitness = calculate_fitness(temp_rule, metrics)
         newrule = Rule(antecedent, consequent, fitness, ct)
 
         if supp > 0.0 && conf > 0.0 && newrule ∉ rules
@@ -49,8 +51,60 @@ function cut_point(var::Float64, numfeatures::Int64)
     return cut
 end
 
-function calculate_fitness(supp::Float64, conf::Float64)
-    return (1.0 * supp + 1.0 * conf) / 2
+function calculate_fitness(rule::Rule, metrics::Union{Dict{Symbol,Float64},Vector{Symbol},Vector{String}})
+    # Convert metrics to Dict format
+    metrics_dict = normalize_metrics(metrics)
+
+    # Calculate weighted sum of metrics
+    total_weight = sum(values(metrics_dict))
+    if total_weight == 0.0
+        throw(ArgumentError("Total weight of metrics cannot be zero"))
+    end
+
+    fitness_sum = 0.0
+    for (metric_name, weight) in metrics_dict
+        metric_value = get_metric_value(rule, metric_name)
+        fitness_sum += weight * metric_value
+    end
+
+    return fitness_sum / total_weight
+end
+
+function normalize_metrics(metrics::Dict{Symbol,Float64})
+    # Already in correct format
+    return metrics
+end
+
+function normalize_metrics(metrics::Vector{Symbol})
+    # Convert vector of symbols to dict with weight 1.0
+    return Dict(metric => 1.0 for metric in metrics)
+end
+
+function normalize_metrics(metrics::Vector{String})
+    # Convert vector of strings to dict with weight 1.0
+    return Dict(Symbol(metric) => 1.0 for metric in metrics)
+end
+
+function get_metric_value(rule::Rule, metric_name::Symbol)
+    if metric_name == :support
+        return support(rule)
+    elseif metric_name == :confidence
+        return confidence(rule)
+    elseif metric_name == :coverage
+        return coverage(rule)
+    elseif metric_name == :interestingness
+        return interestingness(rule)
+    elseif metric_name == :comprehensibility
+        return comprehensibility(rule)
+    elseif metric_name == :amplitude
+        return amplitude(rule)
+    elseif metric_name == :inclusion
+        return inclusion(rule)
+    elseif metric_name == :rhs_support
+        return rhs_support(rule)
+    else
+        throw(ArgumentError("Unknown metric: $metric_name. Valid metrics are: support, confidence, coverage, interestingness, comprehensibility, amplitude, inclusion, rhs_support"))
+    end
 end
 
 function build_rule(solution::Vector{Float64}, features::Vector{Feature})
