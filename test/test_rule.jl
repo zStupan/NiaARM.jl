@@ -6,7 +6,7 @@
     rule1 = Rule(antecedent, consequent)
 
     @test rule.ct == Rule(rule1, transactions).ct
-    @test rule == Rule(antecedent, consequent, -Inf, ContingencyTable(3, 1, 1, 2))
+    @test rule == Rule(antecedent, consequent, -Inf, ContingencyTable(3, 1, 1, 2, 0.0, 0.0))
     @test rule.fitness == -Inf
     @test countall(rule) == 3
     @test countlhs(rule) == 1
