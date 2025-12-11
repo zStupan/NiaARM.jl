@@ -21,19 +21,9 @@ affiliations:
 date: 7 December 2025
 bibliography: paper.bib
 
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
----
-
 # Summary
 
-Association Rule Mining (ARM) is a fundamental data mining method for discovering interesting relationships between attributes in large datasets [@agrawal1993mining]. After its introduction by Agrawal et al., ARM gained prominence through applications such as market basket analysis and has since been applied in domains ranging from retail to health informatics [@altaf2017applications]. The classic ARM setting assumes a transactional database, where each transaction contains a subset of items, and rules of the form $X \Rightarrow Y$ (with $X \cap Y = \emptyset$) capture co‑occurrence patterns between itemsets [@kaushik2023numerical]. Traditional algorithms such as Apriori, ECLAT, and FP‑Growth were designed primarily for boolean or categorical attributes [@agrawal1993mining; @zaki2002scalable; @han2000mining]. Numerical Association Rule Mining (NARM) generalizes ARM to mixed‑type data by representing numerical attributes as value intervals and categorical attributes as discrete labels [@srikant1996mining; @kaushik2023numerical], while rule quality is typically evaluated using support and confidence.
-
-NiaARM.jl is a Julia framework, inspired by the original NiaARM Python package [@Stupan2022], for mining numerical association rules via nature‑inspired optimization.
-
-TODO
+NiaARM.jl is an open-source Julia package for numerical association rule mining based on population-based nature-inspired optimization algorithms. It brings the capabilities of the original Python-based NiaARM framework [@stupan2022niaarm] to the Julia ecosystem, enabling researchers and data scientists working with datasets with mixed attribute types (consisting of categorical and numerical attributes) to discover numerical association rules. NiaARM.jl supports loading datasets, preprocessing, association rule mining, and extraction of discovered rules with associated interestingness metrics. In line with the rule mining part, this package also implements several well-known stochastic population-based nature-inspired algorithms, such as Differential Evolution (DE) [@storn1997differential], Artificial Bee Colony (ABC) [@karaboga2007powerful], Particle Swarm Optimization (PSO) [@kennedy1995particle], and several other metaphor-based nature-inspired algorithms to act as solvers for the numerical rule mining task. The entire numerical association rule mining workflow is further supported by visualization methods for numerical association rules, which is achieved through NarmViz.jl, a package well integrated with NiaARM.jl [@fister2024narmviz].
 
 # Statement of need
 
