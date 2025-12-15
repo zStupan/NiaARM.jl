@@ -57,7 +57,6 @@ export AbstractAttribute,
 
 include("optimization/problem.jl")
 include("optimization/stoppingcriterion.jl")
-include("optimization/population.jl")
 include("optimization/utils.jl")
 include("optimization/algorithms/randomsearch.jl")
 include("optimization/algorithms/pso.jl")

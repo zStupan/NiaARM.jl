@@ -37,10 +37,6 @@ function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vec
 end
 
 function cut_point(var::Float64, numfeatures::Int64)
-    """Calculate cut point.
-    Note: The cut point denotes which part of the vector belongs to the
-    antecedent and which to the consequence of the mined association rule.
-    """
     cut = trunc(Int, (var * numfeatures))
     if cut == 0
         cut = 1
@@ -150,7 +146,7 @@ end
 function feature_position(features::Vector{AbstractFeature}, index::Int64)
     position = 1
     for f in features[begin:index-1]
-        position += Int(isnumerical(f)) + 2
+        position += isnumerical(f) + 2
     end
     return position
 end
