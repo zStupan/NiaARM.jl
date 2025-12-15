@@ -1,5 +1,12 @@
 import Base: show, ==
 
+"""
+    ContingencyTable(antecedent, consequent, transactions)
+
+Sufficient statistics for evaluating a candidate rule against a dataset. Counts cover
+the four quadrants of a 2x2 contingency table and store amplitude/inclusion metadata
+computed during rule construction.
+"""
 struct ContingencyTable
     countall::Int64
     countlhs::Int64
@@ -66,14 +73,12 @@ struct ContingencyTable
     end
 end
 
-countall(ct::ContingencyTable) = ct.countall
+"""
+    Rule(antecedent, consequent[, fitness, ct])
 
-countlhs(ct::ContingencyTable) = ct.countlhs
-
-countrhs(ct::ContingencyTable) = ct.countrhs
-
-countnull(ct::ContingencyTable) = ct.countnull
-
+Represents a mined association rule with its antecedent and consequent attribute
+constraints, the current fitness value, and a cached `ContingencyTable`.
+"""
 struct Rule
     antecedent::Vector{AbstractAttribute}
     consequent::Vector{AbstractAttribute}
@@ -89,11 +94,43 @@ struct Rule
     Rule(rule::Rule, transactions::DataFrame) = new(rule.antecedent, rule.consequent, rule.fitness, ContingencyTable(rule.antecedent, rule.consequent, transactions))
 end
 
+"""
+    countall(ct::ContingencyTable)
+    countall(rule::Rule)
+
+Number of transactions satisfying both antecedent and consequent.
+"""
+countall(ct::ContingencyTable) = ct.countall
+
 countall(r::Rule) = countall(r.ct)
+
+"""
+    countlhs(ct::ContingencyTable)
+    countlhs(rule::Rule)
+
+Number of transactions satisfying the antecedent only.
+"""
+countlhs(ct::ContingencyTable) = ct.countlhs
 
 countlhs(r::Rule) = countlhs(r.ct)
 
+"""
+    countrhs(ct::ContingencyTable)
+    countrhs(rule::Rule)
+
+Number of transactions satisfying the consequent only.
+"""
+countrhs(ct::ContingencyTable) = ct.countrhs
+
 countrhs(r::Rule) = countrhs(r.ct)
+
+"""
+    countnull(ct::ContingencyTable)
+    countnull(rule::Rule)
+
+Number of transactions satisfying neither antecedent nor consequent.
+"""
+countnull(ct::ContingencyTable) = ct.countnull
 
 countnull(r::Rule) = countnull(r.ct)
 

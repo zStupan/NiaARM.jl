@@ -1,3 +1,10 @@
+"""
+    cs(feval, problem, criterion; popsize=25, pa=0.25, seed=nothing, kwargs...)
+
+Cuckoo Search using Lévy flights and discovery probability `pa` for nest replacement.
+Maintains best nest while generating new solutions via random permutations and heavy-
+tailed steps.
+"""
 function cs(
     feval::Function,
     problem::Problem,

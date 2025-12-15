@@ -1,3 +1,8 @@
+"""
+    randchoice(rng, n, k)
+
+Pick `k` unique indices from `1:n` using `rng`.
+"""
 function randchoice(rng::AbstractRNG, n::Int64, k::Int64)
     perm = randperm(rng, n)
     return first(perm, k)
@@ -8,6 +13,11 @@ function randchoice(rng::AbstractRNG, n::AbstractArray, k::Int64)
     return first(perm, k)
 end
 
+"""
+    randlevy(rng; alpha=0.01, beta=1.5)
+
+Draw a Lévy-distributed random variate using the Mantegna algorithm.
+"""
 function randlevy(rng::AbstractRNG; alpha::Float64=0.01, beta::Float64=1.5)
     sigma = (gamma(1 + beta) * sin(pi * beta / 2) / (gamma((1 + beta) / 2) * beta * 2 ^ ((beta - 1) / 2))) ^ (1 / beta)
     u = sigma * randn(rng)
@@ -47,7 +57,11 @@ function parentmedium!(trial::AbstractVector{Float64}, parent::AbstractVector{Fl
     return trial
 end
 
+"""
+    initpopulation(popsize, problem, rng)
+
+Sample an initial population uniformly within the problem initialization bounds.
+"""
 function initpopulation(popsize::Int64, problem::Problem, rng::AbstractRNG)
     return problem.lowerinit .+ rand!(rng, zeros(popsize, problem.dimension)) .* (problem.upperinit - problem.lowerinit)
 end
-

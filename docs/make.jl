@@ -2,14 +2,29 @@ using Documenter
 using NiaARM
 
 makedocs(
-    sitename = "NiaARM",
+    sitename = "NiaARM.jl",
     format = Documenter.HTML(),
-    modules = [NiaARM]
+    modules = [NiaARM],
+    pages = [
+        "Home" => "index.md",
+        "Manual" => [
+            "getting_started.md",
+            "interestingness_measures.md",
+            "algorithms.md",
+            "visualization.md",
+        ],
+        "API Reference" => "api_reference.md",
+        "About" => [
+            "contributing.md",
+            "code_of_conduct.md",
+            "license.md",
+
+        ]
+    ],
 )
 
-# Documenter can also automatically deploy documentation to gh-pages.
-# See "Hosting Documentation" and deploydocs() in the Documenter manual
-# for more information.
-#=deploydocs(
-    repo = "<repository url>"
-)=#
+
+deploydocs(
+    repo = "https://github.com/firefly-cpp/NiaARM.jl",
+    push_preview = true,
+)

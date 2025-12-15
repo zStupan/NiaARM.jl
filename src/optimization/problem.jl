@@ -1,3 +1,10 @@
+"""
+    Problem(dimension, lowerbound, upperbound[, lowerinit, upperinit])
+
+Continuous search-space description used by optimization algorithms. Bounds constrain
+candidate solutions and initialization ranges; validation guards against invalid
+domains.
+"""
 struct Problem
     dimension::Int64
     lowerbound::Float64

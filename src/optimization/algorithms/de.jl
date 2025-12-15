@@ -1,3 +1,9 @@
+"""
+    de(feval, problem, criterion; popsize=50, cr=0.8, f=0.9, seed=nothing, kwargs...)
+
+Differential Evolution using DE/rand/1/bin strategy. Generates trial vectors via
+differential mutation and binomial crossover, selecting improvements greedily.
+"""
 function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=50, cr::Float64=0.8, f::Float64=0.9, seed::Union{Int64,Nothing}=nothing, kwargs...)
     if popsize < 4
         throw(DomainError("popsize < 4"))
@@ -13,7 +19,7 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
     bestfitness = Inf
     for (i, individual) in enumerate(eachrow(pop))
         fx = feval(individual, problem=problem; kwargs...)
-        @inbounds fitness[i] = f
+        @inbounds fitness[i] = fx
         if fx < bestfitness
             bestfitness = fx
         end
