@@ -11,7 +11,7 @@ function fpa(
     end
 
     if p < 0 || p > 1
-        throw(DomainError("pa must be in [0, 1]"))
+        throw(DomainError("p must be in [0, 1]"))
     end
 
     evals = 0
