@@ -1,3 +1,10 @@
+"""
+    pso(feval, problem, criterion; popsize=10, omega=0.7, c1=2.0, c2=2.0, seed=nothing, kwargs...)
+
+Particle Swarm Optimization with inertia weight. Maintains a swarm of candidate rules,
+updating velocities toward personal and global best positions while respecting problem
+bounds.
+"""
 function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=10, omega::Float64=0.7, c1::Float64=2.0, c2::Float64=2.0, seed::Union{Int64,Nothing}=nothing, kwargs...)
     evals = 0
     iters = 0

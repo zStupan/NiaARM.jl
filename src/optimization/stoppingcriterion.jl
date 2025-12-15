@@ -1,3 +1,9 @@
+"""
+    StoppingCriterion(; maxevals=typemax(Int), maxiters=typemax(Int), acceptable_fitness=-Inf)
+
+Stop condition shared by all optimizers. At least one limit must be finite so that the
+search terminates.
+"""
 struct StoppingCriterion
     maxevals::Int64
     maxiters::Int64
@@ -20,6 +26,11 @@ struct StoppingCriterion
     end
 end
 
+"""
+    terminate(criterion, evals, iters, bestfitness)
+
+Return `true` when any stopping condition is met.
+"""
 function terminate(criterion::StoppingCriterion, evals::Int64, iters::Int64, bestfitness::Float64)
     return evals >= criterion.maxevals || iters >= criterion.maxiters || bestfitness <= criterion.acceptable_fitness
 end

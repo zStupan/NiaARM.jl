@@ -1,3 +1,10 @@
+"""
+    fpa(feval, problem, criterion; popsize=25, p=0.8, seed=nothing, kwargs...)
+
+Flower Pollination Algorithm alternating global Lévy flights and local pollination
+steps with switch probability `p`. Tracks the current best solution across the
+population.
+"""
 function fpa(
     feval::Function,
     problem::Problem,
@@ -55,7 +62,7 @@ function fpa(
                 clamp!(view(solutions, i, :), lb, ub)
             end
 
-            fval = feval(view(solutions, i, :), problem=problem, kwargs...)
+            fval = feval(view(solutions, i, :), problem=problem; kwargs...)
             @inbounds if fval <= fitness[i]
                 population[i, :] .= solutions[i, :]
                 fitness[i] = fval

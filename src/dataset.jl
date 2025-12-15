@@ -1,3 +1,10 @@
+"""
+    Dataset(df_or_path)
+
+Wrap a tabular dataset and derive feature metadata used by optimizers. Accepts either a
+`DataFrame` or path to a CSV file. Features are inferred from column types and overall
+problem dimensionality is computed for use with optimization algorithms.
+"""
 struct Dataset
     transactions::DataFrame
     features::Vector{AbstractFeature}

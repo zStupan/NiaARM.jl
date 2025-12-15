@@ -1,3 +1,10 @@
+"""
+    es(feval, problem, criterion; mu=15, lambda=100, sigmainit=0.3, tau=nothing, tauprime=nothing, seed=nothing, kwargs...)
+
+Self-adaptive (μ, λ) Evolution Strategy with log-normal step-size control. Generates
+offspring via Gaussian perturbations and selects the best `mu` individuals each
+generation.
+"""
 function es(
     feval::Function,
     problem::Problem,

@@ -1,2 +1,6 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+NiaARM = "cb655f37-3f9a-467f-922e-5a165e048db7"
+
+[sources]
+NiaARM = {path = ".."}

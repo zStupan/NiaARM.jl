@@ -1,7 +1,18 @@
 import Base: show, ==
 
+"""
+    AbstractFeature
+
+Abstract supertype describing dataset columns used to build candidate rules.
+"""
 abstract type AbstractFeature end
 
+"""
+    NumericalFeature(name, min, max)
+
+Metadata describing a numerical column along with its observed minimum and maximum.
+Bounds are used to scale optimizer solutions back into meaningful ranges.
+"""
 struct NumericalFeature{T<:Real} <: AbstractFeature
     name::String
     min::T
@@ -18,6 +29,11 @@ show(io::IO, feature::NumericalFeature) = print(io, "$(feature.name)(min = $((fe
 
 ==(lhs::NumericalFeature, rhs::NumericalFeature) = lhs.name == rhs.name && isapprox(lhs.min, rhs.min, atol=1e-6, rtol=1e-6) && isapprox(lhs.max, rhs.max, atol=1e-6, rtol=1e-6)
 
+"""
+    CategoricalFeature(name, categories)
+
+Metadata describing a categorical column and its possible category values.
+"""
 struct CategoricalFeature <: AbstractFeature
     name::String
     categories::Vector{String}
@@ -29,6 +45,16 @@ show(io::IO, feature::CategoricalFeature) = print(io, "$(feature.name)(categorie
 
 ==(lhs::CategoricalFeature, rhs::CategoricalFeature) = lhs.name == rhs.name && lhs.categories == rhs.categories
 
+"""
+    isnumerical(feature)
+
+Return `true` when a feature is numerical.
+"""
 isnumerical(feature::AbstractFeature) = isa(feature, NumericalFeature)
 
+"""
+    iscategorical(feature)
+
+Return `true` when a feature is categorical.
+"""
 iscategorical(feature::AbstractFeature) = isa(feature, CategoricalFeature)

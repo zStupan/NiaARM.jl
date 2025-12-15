@@ -1,3 +1,9 @@
+"""
+    randomsearch(feval, problem, criterion; seed=nothing, kwargs...)
+
+Baseline optimizer that samples solutions uniformly within the problem bounds until the
+`StoppingCriterion` is met. Useful as a reference or for quick smoke tests.
+"""
 function randomsearch(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; seed::Union{Int64,Nothing}=nothing, kwargs...)
     evals = 0
     iters = 0

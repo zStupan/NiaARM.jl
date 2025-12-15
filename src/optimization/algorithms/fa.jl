@@ -1,3 +1,9 @@
+"""
+    fa(feval, problem, criterion; popsize=20, alpha=1.0, beta0=1.0, gamma=0.01, theta=0.97, seed=nothing, kwargs...)
+
+Firefly Algorithm where attraction decreases exponentially with distance. Random walk
+amplitude decays by `theta` each iteration to balance exploration and exploitation.
+"""
 function fa(
     feval::Function,
     problem::Problem,

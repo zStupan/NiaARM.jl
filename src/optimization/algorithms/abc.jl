@@ -2,6 +2,13 @@ function calculatefitness(objval)
     return objval >= 0 ? 1.0 / (objval + 1) : 1.0 + abs(objval)
 end
 
+"""
+    abc(feval, problem, criterion; popsize=20, limit=100, seed=nothing, kwargs...)
+
+Artificial Bee Colony optimizer splitting workers and onlookers across a set of food
+sources. Exploits neighbor differences to propose new points and periodically replaces
+stagnant sources with scouts.
+"""
 function abc(
     feval::Function,
     problem::Problem,
@@ -38,7 +45,7 @@ function abc(
 
     bestfitness = Inf
     for i in 1:foodnumber
-        objval = feval(foods[i, :])
+        objval = feval(foods[i, :], problem=problem; kwargs...)
         objvals[i] = objval
         fitness[i] = calculatefitness(objval)
         bestfitness = min(bestfitness, objval)
@@ -66,7 +73,7 @@ function abc(
 
             sol = clamp.(sol, lb, ub)
 
-            objval = feval(sol)
+            objval = feval(sol, problem=problem; kwargs...)
             fitnessval = calculatefitness(objval)
 
             if fitnessval > fitness[i]
@@ -106,7 +113,7 @@ function abc(
 
                 sol = clamp.(sol, lb, ub)
 
-                objval = feval(sol)
+                objval = feval(sol, problem=problem; kwargs...)
                 fitnessval = calculatefitness(objval)
 
                 if fitnessval > fitness[i]
@@ -140,7 +147,7 @@ function abc(
         if trial[ind] > limit
             trial[ind] = 0
             sol = (ub - lb) .* rand(rng, n) .+ lb
-            objval = feval(sol)
+            objval = feval(sol, problem=problem; kwargs...)
             fitnessval = calculatefitness(objval)
             foods[ind, :] = sol
             fitness[ind] = fitnessval

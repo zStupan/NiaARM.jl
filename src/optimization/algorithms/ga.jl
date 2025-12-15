@@ -24,6 +24,12 @@ function uniform_mutation!(individual::AbstractVector{Float64}, problem::Problem
     end
 end
 
+"""
+    ga(feval, problem, criterion; popsize=50, tournament_size=5, crossover_rate=0.7, mutation_rate=0.05, seed=nothing, kwargs...)
+
+Steady-state Genetic Algorithm with tournament selection, uniform crossover, and
+per-gene mutation. Populations are clamped to the `Problem` bounds each generation.
+"""
 function ga(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=50, tournament_size::Int64=5, crossover_rate::Float64=0.7, mutation_rate::Float64=0.05, seed::Union{Int64,Nothing}=nothing, kwargs...)
     if popsize < 2
         throw(DomainError("popsize < 2"))

@@ -1,3 +1,10 @@
+"""
+    narm(solution; problem, features, transactions, rules, metrics)
+
+Objective function used by optimization algorithms. Decodes `solution` into a rule,
+evaluates it on `transactions` with the provided `metrics`, and inserts novel rules into
+`rules`. Returns the negated fitness so minimizers can be used for maximization.
+"""
 function narm(solution::AbstractVector{Float64}; problem::Problem, features::Vector{AbstractFeature}, transactions::DataFrame, rules::Vector{Rule}, metrics::Union{Dict{Symbol,Float64},Vector{Symbol},Vector{String}}, kwargs...)
     if length(solution) != problem.dimension
         throw(DimensionMismatch("$(length(solution)) != $(problem.dimension)"))

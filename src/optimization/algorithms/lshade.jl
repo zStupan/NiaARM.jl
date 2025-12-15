@@ -1,3 +1,10 @@
+"""
+    lshade(feval, problem, criterion; popsize=18, memorysize=6, pbestrate=0.11, archiverate=2.6, seed=nothing, kwargs...)
+
+L-SHADE with current-to-pbest/1/bin mutation, success-history based parameter
+adaptation, an external archive, and linear population size reduction. Requires
+`StoppingCriterion.maxevals` to be set for the reduction schedule.
+"""
 function lshade(
     feval::Function,
     problem::Problem,
