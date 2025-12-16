@@ -25,6 +25,6 @@ makedocs(
 
 
 deploydocs(
-    repo = "https://github.com/firefly-cpp/NiaARM.jl",
+    repo = "https://github.com/zStupan/NiaARM.jl",
     push_preview = true,
 )
