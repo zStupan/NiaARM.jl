@@ -3,7 +3,9 @@ using NiaARM
 
 makedocs(
     sitename = "NiaARM.jl",
-    format = Documenter.HTML(),
+    format = Documenter.HTML(
+        sidebar_sitename = false,
+    ),
     modules = [NiaARM],
     pages = [
         "Home" => "index.md",
