@@ -69,7 +69,7 @@ function lshade(
 
     pnum = max(2, round(Int, popsize * pbestrate))
 
-    @inbounds for (i, individual) in enumerate(eachrow(population))
+    for (i, individual) in enumerate(eachrow(population))
         fx = feval(individual, problem=problem; kwargs...)
         fitness[i] = fx
 
@@ -86,7 +86,7 @@ function lshade(
 
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         sortedindices = partialsortperm(fitness, 1:pnum)
-        @inbounds for i in 1:popsize
+        for i in 1:popsize
             random_selected_period = rand(rng, 1:memorysize)
             mu_sf = memory_sf[random_selected_period]
             mu_cr = memory_cr[random_selected_period]
@@ -155,7 +155,7 @@ function lshade(
             end
         end
 
-        @inbounds for i in 1:popsize
+        for i in 1:popsize
             if childrenfitness[i] == fitness[i]
                 copyto!(view(population, i, :), view(children, i, :))
             elseif childrenfitness[i] < fitness[i]
@@ -185,7 +185,7 @@ function lshade(
             sumcr = 0.0
             sumsf_sq = 0.0
             sumcr_sq = 0.0
-            @inbounds for i in 1:successcount
+            for i in 1:successcount
                 w = diff_fit[i] / sumdiff
                 sumsf += w * success_sf[i]
                 sumcr += w * success_cr[i]
@@ -193,12 +193,12 @@ function lshade(
                 sumcr_sq += w * success_cr[i] * success_cr[i]
             end
             
-            @inbounds memory_sf[memorypos] = sumsf_sq / sumsf
+            memory_sf[memorypos] = sumsf_sq / sumsf
             
             if sumcr == 0 || memory_cr[memorypos] == -1
-                @inbounds memory_cr[memorypos] = -1
+                memory_cr[memorypos] = -1
             else
-                @inbounds memory_cr[memorypos] = sumcr_sq / sumcr
+                memory_cr[memorypos] = sumcr_sq / sumcr
             end
 
             memorypos += 1

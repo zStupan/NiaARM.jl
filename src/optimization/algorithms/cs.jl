@@ -46,7 +46,7 @@ function cs(
 
     for (i, individual) in enumerate(eachrow(population))
         f = feval(individual, problem=problem; kwargs...)
-        @inbounds fitness[i] = f
+        fitness[i] = f
         if f < bestfitness
             bestfitness = f
             bestindex = i
@@ -61,7 +61,7 @@ function cs(
         randlevy!(rng, levy_steps)
         randn!(rng, random_steps)
 
-        @inbounds for i = 1:popsize
+        for i = 1:popsize
             for j = 1:dim
                 stepsize[i, j] = levy_steps[i, j] * (population[i, j] - population[bestindex, j])
                 newpopulation[i, j] = clamp(population[i, j] + stepsize[i, j] * random_steps[i, j], lb, ub)
@@ -88,7 +88,7 @@ function cs(
         randperm!(rng, perm_j)
         r = rand(rng)
 
-        @inbounds for i = 1:popsize
+        for i = 1:popsize
             for j = 1:dim
                 stepsize[i, j] = r * (population[perm_i[i], j] - population[perm_j[i], j])
                 newpopulation[i, j] = clamp(population[i, j] + stepsize[i, j] * abandoned[i, j], lb, ub)

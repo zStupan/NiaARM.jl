@@ -19,7 +19,7 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
     bestfitness = Inf
     for (i, individual) in enumerate(eachrow(pop))
         fx = feval(individual, problem=problem; kwargs...)
-        @inbounds fitness[i] = fx
+        fitness[i] = fx
         if fx < bestfitness
             bestfitness = fx
         end
@@ -33,10 +33,10 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         for i = 1:popsize
             perm = randchoice(rng, popsize, 4)
-            @inbounds a = perm[1]
-            @inbounds b = perm[2]
-            @inbounds c = perm[3]
-            @inbounds k = perm[4]
+            a = perm[1]
+            b = perm[2]
+            c = perm[3]
+            k = perm[4]
 
             if a == i
                 a = k
@@ -48,20 +48,20 @@ function de(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
 
             r = rand(rng, 1:problem.dimension)
 
-            @inbounds y = pop[i, :]
+            y = pop[i, :]
 
             for d = 1:problem.dimension
                 if d == r || rand(rng) < cr
-                    @inbounds y[d] = pop[a, d] + f * (pop[b, d] - pop[c, d])
-                    @inbounds y[d] = clamp(y[d], problem.lowerbound, problem.upperbound)
+                    y[d] = pop[a, d] + f * (pop[b, d] - pop[c, d])
+                    y[d] = clamp(y[d], problem.lowerbound, problem.upperbound)
                 end
             end
 
             newfitness = feval(y, problem=problem; kwargs...)
 
             if newfitness < fitness[i]
-                @inbounds fitness[i] = newfitness
-                @inbounds pop[i, :] = y
+                fitness[i] = newfitness
+                pop[i, :] = y
 
                 if newfitness < bestfitness
                     bestfitness = newfitness

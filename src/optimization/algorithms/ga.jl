@@ -10,7 +10,7 @@ function uniform_crossover(parent1::AbstractVector{Float64}, parent2::AbstractVe
     offspring = similar(parent1)
 
     for d = 1:dimension
-        @inbounds offspring[d] = rand(rng) < crossover_rate ? parent1[d] : parent2[d]
+        offspring[d] = rand(rng) < crossover_rate ? parent1[d] : parent2[d]
     end
 
     return offspring
@@ -19,7 +19,7 @@ end
 function uniform_mutation!(individual::AbstractVector{Float64}, problem::Problem, mutation_rate::Float64, rng::AbstractRNG)
     for d = 1:problem.dimension
         if rand(rng) < mutation_rate
-            @inbounds individual[d] = problem.lowerbound + rand(rng) * (problem.upperbound - problem.lowerbound)
+            individual[d] = problem.lowerbound + rand(rng) * (problem.upperbound - problem.lowerbound)
         end
     end
 end
@@ -56,9 +56,9 @@ function ga(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
     bestfitness = Inf
 
     for (i, individual) in enumerate(eachrow(pop))
-        @inbounds fitness[i] = feval(individual, problem=problem; kwargs...)
+        fitness[i] = feval(individual, problem=problem; kwargs...)
         if fitness[i] < bestfitness
-            @inbounds bestfitness = fitness[i]
+            bestfitness = fitness[i]
         end
         evals += 1
 
@@ -72,7 +72,7 @@ function ga(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
             parent1_idx = tournament_selection(fitness, tournament_size, rng)
             parent2_idx = tournament_selection(fitness, tournament_size, rng)
 
-            @inbounds x = uniform_crossover(pop[parent1_idx, :], pop[parent2_idx, :], crossover_rate, rng)
+            x = uniform_crossover(pop[parent1_idx, :], pop[parent2_idx, :], crossover_rate, rng)
 
             uniform_mutation!(x, problem, mutation_rate, rng)
 
@@ -86,8 +86,8 @@ function ga(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
 
             evals += 1
 
-            @inbounds pop[i, :] = x
-            @inbounds fitness[i] = fx
+            pop[i, :] = x
+            fitness[i] = fx
 
             if terminate(stoppingcriterion, evals, iters, bestfitness)
                 return bestfitness

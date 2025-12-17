@@ -49,8 +49,8 @@ function es(
     bestfitness = Inf
 
     for i = 1:mu
-        @inbounds fx = feval(population[i, :], problem=problem; kwargs...)
-        @inbounds fitness[i] = fx
+        fx = feval(population[i, :], problem=problem; kwargs...)
+        fitness[i] = fx
         if fx < bestfitness
             bestfitness = fx
         end
@@ -65,7 +65,7 @@ function es(
     offspringfitness = zeros(lambda)
 
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
-        @inbounds for i = 1:lambda
+        for i = 1:lambda
             parentindex = rand(rng, 1:mu)
 
             # Self-adapt step size

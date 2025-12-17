@@ -58,7 +58,7 @@ function abc(
 
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         # Worker bee phase
-        @inbounds for i = 1:foodnumber
+        for i = 1:foodnumber
             param2change = rand(rng, 1:n)
 
             neighbour = rand(rng, 1:foodnumber)

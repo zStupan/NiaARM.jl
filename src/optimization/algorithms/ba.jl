@@ -31,7 +31,7 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
 
     for (i, individual) in enumerate(eachrow(pop))
         f = feval(individual, problem=problem; kwargs...)
-        @inbounds fitness[i] = f
+        fitness[i] = f
         if f < bestfitness
             bestfitness = f
             bestindex = i
@@ -43,7 +43,7 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
         end
     end
 
-    @inbounds best .= pop[bestindex, :]
+    best .= pop[bestindex, :]
 
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         loudness *= alpha
@@ -52,7 +52,7 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
         for i = 1:popsize
             freq[i] = fmin + (fmax - fmin) * rand(rng)
 
-            @views @inbounds begin
+            @views begin
                 vi = velocity[i, :]
                 xi = pop[i, :]
                 @. vi = vi + (xi - best) * freq[i]
@@ -69,13 +69,13 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
             newfitness = feval(candidate, problem=problem; kwargs...)
 
             if newfitness <= fitness[i] && rand(rng) > loudness
-                @views @inbounds pop[i, :] .= candidate
-                @inbounds fitness[i] = newfitness
+                @views pop[i, :] .= candidate
+                fitness[i] = newfitness
             end
 
             if newfitness <= bestfitness
                 bestfitness = newfitness
-                @inbounds best .= candidate
+                best .= candidate
             end
 
             evals += 1

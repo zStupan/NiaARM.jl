@@ -22,7 +22,7 @@ function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     bestindex = 1
     for (i, individual) in enumerate(eachrow(pop))
         f = feval(individual, problem=problem; kwargs...)
-        @inbounds fitness[i] = f
+        fitness[i] = f
         if f < bestfitness
             bestfitness = f
         end
@@ -36,18 +36,18 @@ function pso(feval::Function, problem::Problem, stoppingcriterion::StoppingCrite
     while !terminate(stoppingcriterion, evals, iters, bestfitness)
         for i = 1:popsize
             for d = 1:problem.dimension
-                @inbounds velocity[i, d] = omega * velocity[i, d] + c1 * rand(rng) * (pbest[i, d] - pop[i, d]) + c2 * rand(rng) * (pop[bestindex, d] - pop[i, d])
-                @inbounds velocity[i, d] = clamp(velocity[i, d], lowervelocity, uppervelocity)
+                velocity[i, d] = omega * velocity[i, d] + c1 * rand(rng) * (pbest[i, d] - pop[i, d]) + c2 * rand(rng) * (pop[bestindex, d] - pop[i, d])
+                velocity[i, d] = clamp(velocity[i, d], lowervelocity, uppervelocity)
             end
 
-            @inbounds pop[i, :] = pop[i, :] .+ velocity[i, :]
-            @inbounds pop[i, :] = clamp!(pop[i, :], problem.lowerbound, problem.upperbound)
+            pop[i, :] = pop[i, :] .+ velocity[i, :]
+            pop[i, :] = clamp!(pop[i, :], problem.lowerbound, problem.upperbound)
 
             newfitness = feval(pop[i, :], problem=problem; kwargs...)
 
             if newfitness < fitness[i]
-                @inbounds fitness[i] = newfitness
-                @inbounds pbest[i, :] = pop[i, :]
+                fitness[i] = newfitness
+                pbest[i, :] = pop[i, :]
 
                 if newfitness < bestfitness
                     bestindex = i
