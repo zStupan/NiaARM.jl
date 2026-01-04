@@ -12,7 +12,8 @@ function fpa(
     popsize::Int64=25,
     p::Float64=0.8,
     seed::Union{Int64,Nothing}=nothing,
-    kwargs...)
+    kwargs...,
+)
     if popsize <= 0
         throw(DomainError("popsize <= 0"))
     end
@@ -38,7 +39,7 @@ function fpa(
     bestfitness = Inf
     bestindex = 1
     for (i, individual) in enumerate(eachrow(population))
-        f = feval(individual, problem=problem; kwargs...)
+        f = feval(individual; problem=problem, kwargs...)
         fitness[i] = f
         if f < bestfitness
             bestfitness = f
@@ -54,7 +55,9 @@ function fpa(
         for i in 1:popsize
             if rand(rng) > p
                 randlevy!(rng, stepsize)
-                solutions[i, :] .= population[i, :] .+ stepsize .* (solutions[i, :] .- population[bestindex, :])
+                solutions[i, :] .=
+                    population[i, :] .+
+                    stepsize .* (solutions[i, :] .- population[bestindex, :])
                 clamp!(view(solutions, i, :), lb, ub)
             else
                 j, k = randchoice(rng, popsize, 2)
@@ -62,7 +65,7 @@ function fpa(
                 clamp!(view(solutions, i, :), lb, ub)
             end
 
-            fval = feval(view(solutions, i, :), problem=problem; kwargs...)
+            fval = feval(view(solutions, i, :); problem=problem, kwargs...)
             if fval <= fitness[i]
                 population[i, :] .= solutions[i, :]
                 fitness[i] = fval

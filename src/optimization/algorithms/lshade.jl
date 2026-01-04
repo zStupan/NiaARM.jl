@@ -14,10 +14,14 @@ function lshade(
     pbestrate::Float64=0.11,
     archiverate::Float64=2.6,
     seed::Union{Int64,Nothing}=nothing,
-    kwargs...
+    kwargs...,
 )
     if stoppingcriterion.maxevals == typemax(Int64)
-        throw(DomainError(stoppingcriterion.maxevals, "StoppingCriterion::maxevals must be set"))
+        throw(
+            DomainError(
+                stoppingcriterion.maxevals, "StoppingCriterion::maxevals must be set"
+            ),
+        )
     end
 
     if popsize < 4
@@ -70,7 +74,7 @@ function lshade(
     pnum = max(2, round(Int, popsize * pbestrate))
 
     for (i, individual) in enumerate(eachrow(population))
-        fx = feval(individual, problem=problem; kwargs...)
+        fx = feval(individual; problem=problem, kwargs...)
         fitness[i] = fx
 
         if fx < bestfitness
@@ -112,9 +116,9 @@ function lshade(
                 r1 = rand(rng, 1:popsize)
             end
 
-            r2 = rand(rng, 1:(popsize+archivecount))
+            r2 = rand(rng, 1:(popsize + archivecount))
             while r2 == i || r2 == r1
-                r2 = rand(rng, 1:(popsize+archivecount))
+                r2 = rand(rng, 1:(popsize + archivecount))
             end
 
             rdim = rand(rng, 1:problem.dimension)
@@ -122,9 +126,10 @@ function lshade(
                 r2 -= popsize
                 for d in 1:problem.dimension
                     if rand(rng) < cr || d == rdim
-                        children[i, d] = population[i, d] +
-                                         sf * (population[pbestindividual, d] - population[i, d]) +
-                                         sf * (population[r1, d] - archive[r2, d])
+                        children[i, d] =
+                            population[i, d] +
+                            sf * (population[pbestindividual, d] - population[i, d]) +
+                            sf * (population[r1, d] - archive[r2, d])
                     else
                         children[i, d] = population[i, d]
                     end
@@ -132,18 +137,19 @@ function lshade(
             else
                 for d in 1:problem.dimension
                     if rand(rng) < cr || d == rdim
-                        children[i, d] = population[i, d] +
-                                         sf * (population[pbestindividual, d] - population[i, d]) +
-                                         sf * (population[r1, d] - population[r2, d])
+                        children[i, d] =
+                            population[i, d] +
+                            sf * (population[pbestindividual, d] - population[i, d]) +
+                            sf * (population[r1, d] - population[r2, d])
                     else
                         children[i, d] = population[i, d]
                     end
                 end
             end
-            
+
             parentmedium!(view(children, i, :), view(population, i, :), problem)
 
-            childrenfitness[i] = feval(view(children, i, :), problem=problem; kwargs...)
+            childrenfitness[i] = feval(view(children, i, :); problem=problem, kwargs...)
             evals += 1
 
             if childrenfitness[i] < bestfitness
@@ -192,9 +198,9 @@ function lshade(
                 sumsf_sq += w * success_sf[i] * success_sf[i]
                 sumcr_sq += w * success_cr[i] * success_cr[i]
             end
-            
+
             memory_sf[memorypos] = sumsf_sq / sumsf
-            
+
             if sumcr == 0 || memory_cr[memorypos] == -1
                 memory_cr[memorypos] = -1
             else
@@ -211,17 +217,19 @@ function lshade(
             empty!(success_cr)
         end
 
-        newpopsize = round(Int, ((4 - popsizeinit) / stoppingcriterion.maxevals) * evals + popsizeinit)
+        newpopsize = round(
+            Int, ((4 - popsizeinit) / stoppingcriterion.maxevals) * evals + popsizeinit
+        )
         if popsize > newpopsize
             reduction_num = popsize - newpopsize
             if popsize - reduction_num < 4
                 reduction_num = popsize - 4
             end
 
-            worstindices = partialsortperm(fitness, 1:reduction_num, rev=true)
+            worstindices = partialsortperm(fitness, 1:reduction_num; rev=true)
             keep = trues(popsize)
             keep[worstindices] .= false
-            
+
             population = population[keep, :]
             fitness = fitness[keep]
             popsize -= reduction_num

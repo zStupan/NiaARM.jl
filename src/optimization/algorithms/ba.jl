@@ -5,7 +5,20 @@ Bat Algorithm implementation following frequency-tuned velocity updates and adap
 loudness/pulse rate schedules. Exploits the current global best while injecting random
 walks for local search.
 """
-function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriterion; popsize::Int64=40, loudness0::Float64=1.0, pulse_rate0::Float64=1.0, fmin::Float64=0.0, fmax::Float64=2.0, alpha::Float64=0.97, gamma::Float64=0.1, seed::Union{Int64,Nothing}=nothing, kwargs...)
+function ba(
+    feval::Function,
+    problem::Problem,
+    stoppingcriterion::StoppingCriterion;
+    popsize::Int64=40,
+    loudness0::Float64=1.0,
+    pulse_rate0::Float64=1.0,
+    fmin::Float64=0.0,
+    fmax::Float64=2.0,
+    alpha::Float64=0.97,
+    gamma::Float64=0.1,
+    seed::Union{Int64,Nothing}=nothing,
+    kwargs...,
+)
     if popsize <= 0
         throw(DomainError("popsize <= 0"))
     end
@@ -30,7 +43,7 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
     bestindex = 1
 
     for (i, individual) in enumerate(eachrow(pop))
-        f = feval(individual, problem=problem; kwargs...)
+        f = feval(individual; problem=problem, kwargs...)
         fitness[i] = f
         if f < bestfitness
             bestfitness = f
@@ -49,7 +62,7 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
         loudness *= alpha
         current_pulse_rate = base_pulse_rate * (1 - exp(-gamma * (iters + 1)))
 
-        for i = 1:popsize
+        for i in 1:popsize
             freq[i] = fmin + (fmax - fmin) * rand(rng)
 
             @views begin
@@ -66,7 +79,7 @@ function ba(feval::Function, problem::Problem, stoppingcriterion::StoppingCriter
 
             clamp!(candidate, problem.lowerbound, problem.upperbound)
 
-            newfitness = feval(candidate, problem=problem; kwargs...)
+            newfitness = feval(candidate; problem=problem, kwargs...)
 
             if newfitness <= fitness[i] && rand(rng) > loudness
                 @views pop[i, :] .= candidate
